@@ -2,10 +2,15 @@
 #include "main.h"
 #include "keycheck.h"
 #include "game.h"
+#include "tetris.h"
+#include "enemy.h"
 
 bool GameSysInit(void)
 {
 	bool rtnFlag = true;
+
+	TetrisSysInit();
+
 
 	return rtnFlag;
 }
@@ -35,7 +40,8 @@ int GameScene(void)
 	{
 		rtn = 4;
 	}
-
+	TetrisCtl();
+	EnemyCtl();
 	GameDraw();
 
 	return rtn;
@@ -47,5 +53,9 @@ void GameDraw(void)
 	SetFontSize(50);
 	DrawFormatString(0, 0, 0xFFFFFF, "GameScene");
 	DrawBox(100, 100, 700, 500, 0x00FF00, true);
+	TetrisDraw();
+	EnemyDraw();
 	ScreenFlip();
 }
+
+
