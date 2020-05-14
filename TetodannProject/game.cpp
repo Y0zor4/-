@@ -75,3 +75,5 @@ int DamageCalc(void)
 
 	return damage;
 }
+
+// Šm”F—p
