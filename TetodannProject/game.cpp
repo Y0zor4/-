@@ -53,9 +53,19 @@ void GameDraw(void)
 	SetFontSize(50);
 	DrawFormatString(0, 0, 0xFFFFFF, "GameScene");
 	DrawBox(100, 100, 700, 500, 0x00FF00, true);
+	DrawFormatString(300, 300, 0xFF0000, "Damage: %d", DamageCalc());
 	TetrisDraw();
 	EnemyDraw();
 	ScreenFlip();
 }
 
+int DamageCalc(void)
+{
+	int line = TetrisLine();
+	int combo = TetrisCombo();
+	int damage = 0;
+	
+	damage = 100 * line * combo;
 
+	return damage;
+}

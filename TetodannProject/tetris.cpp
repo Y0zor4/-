@@ -3,8 +3,7 @@
 #include "keycheck.h"
 #include "tetris.h"
 
-int line;
-int combo;
+
 
 bool TetrisSysInit(void)
 {
@@ -27,10 +26,12 @@ void TetrisDraw(void)
 
 int TetrisLine(void)
 {
+	int line = 0;
 	return line;
 }
 
 int TetrisCombo(void)
 {
+	int combo = 0;
 	return combo;
 }

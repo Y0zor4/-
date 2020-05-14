@@ -6,5 +6,5 @@ int GameScene(void);
 void GameDraw(void);
 
 
-// ダメージ計算用関数
-int DamageCalc();
+int DamageCalc(void);		// ダメージ計算用関数
+

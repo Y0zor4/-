@@ -2,6 +2,7 @@
 #include "main.h"
 #include "keycheck.h"
 #include "enemy.h"
+#include "game.h"
 
 bool EnemySysInit(void)
 {
@@ -16,6 +17,7 @@ void EnemyInit(void)
 
 void EnemyCtl(void)
 {
+	//int damage = DamageCalc();
 }
 
 void EnemyDraw(void)
