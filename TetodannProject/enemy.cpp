@@ -28,7 +28,6 @@ void EnemyCtl(void)
 
 void EnemyDraw(void)
 {
-<<<<<<< HEAD
 	// “G‚Ì‘Ì—ÍƒQ[ƒW
 	DrawBox(900, 90, 1300, 120, 0x000000, true);
 	DrawBox(900, 90, 1300, 120, 0x00FF00, true);
@@ -42,8 +41,5 @@ void EnemyDraw(void)
 
 	DrawFormatString(900, 30, 0xFFFFFF, "100/100");
 
-
-=======
->>>>>>> a323f9c778d17c6f76a4fdf9457a53330668e454
 
 }
