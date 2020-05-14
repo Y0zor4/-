@@ -2,7 +2,7 @@
 #include "main.h"
 #include "keycheck.h"
 #include "enemy.h"
-#include "game.h"
+
 
 bool EnemySysInit(void)
 {
@@ -13,6 +13,7 @@ bool EnemySysInit(void)
 
 void EnemyInit(void)
 {
+
 }
 
 void EnemyCtl(void)
@@ -22,4 +23,5 @@ void EnemyCtl(void)
 
 void EnemyDraw(void)
 {
+
 }
