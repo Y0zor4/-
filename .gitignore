@@ -31,3 +31,5 @@
 *.out
 *.app
 /tetodannProject/Log.txt
+/TetodannProject/.vs
+/TetodannProject/Debug
