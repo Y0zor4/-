@@ -5,19 +5,24 @@
 #include "tetris.h"
 #include "enemy.h"
 
+int backImage;   // ¹Þ°Ñ‚Ì”wŒi—p(“G‚ª‚¢‚È‚¢‚Æ‚±‚ë)
+
 bool GameSysInit(void)
 {
 	bool rtnFlag = true;
 
-	TetrisSysInit();
+	if (!TetrisSysInit()) rtnFlag = false;
+	if (!EnemySysInit())  rtnFlag = false;
 
+	backImage = LoadGraph("Image/back_tmp.png");
 
 	return rtnFlag;
 }
 
 void GameInit(void)
 {
-
+	TetrisInit();
+	EnemyInit();
 }
 
 int GameScene(void)
@@ -40,6 +45,7 @@ int GameScene(void)
 	{
 		rtn = 4;
 	}
+
 	TetrisCtl();
 	EnemyCtl();
 	GameDraw();
@@ -52,7 +58,7 @@ void GameDraw(void)
 	ClsDrawScreen();
 	SetFontSize(50);
 	DrawFormatString(0, 0, 0xFFFFFF, "GameScene");
-	DrawBox(100, 100, 700, 500, 0x00FF00, true);
+	DrawGraph(0, 0, backImage, true);
 	DrawFormatString(300, 300, 0xFF0000, "Damage: %d", DamageCalc());
 	TetrisDraw();
 	EnemyDraw();

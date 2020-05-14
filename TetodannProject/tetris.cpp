@@ -14,14 +14,17 @@ bool TetrisSysInit(void)
 
 void TetrisInit(void)
 {
+
 }
 
 void TetrisCtl(void)
 {
+
 }
 
 void TetrisDraw(void)
 {
+
 }
 
 int TetrisLine(void)
