@@ -59,7 +59,6 @@ void GameDraw(void)
 	SetFontSize(50);
 	DrawFormatString(0, 0, 0xFFFFFF, "GameScene");
 	DrawGraph(0, 0, backImage, true);
-	DrawFormatString(300, 300, 0xFF0000, "Damage: %d", DamageCalc());
 	TetrisDraw();
 	EnemyDraw();
 	ScreenFlip();
