@@ -5,7 +5,6 @@
 
 int mapData[DATA_MAX_Y][DATA_MAX_X];		// ﾃﾞｰﾀ格納用
 
-// 確認用コメント
 
 bool TetrisSysInit(void)
 {
