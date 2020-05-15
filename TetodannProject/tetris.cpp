@@ -33,21 +33,21 @@ bool TetrisSysInit(void)
 // ÃÄØ½ŠÖ˜A‰Šú‰»
 void TetrisInit(void)
 {
-	for (int x = 0; x < DATA_MAX_X; x++)
-	{
-		for (int y = 0; y < DATA_MAX_Y; y++)
-		{
-			mapData[y][x] = -1;
-			if (y == 0 || y == DATA_MAX_Y - 1)
-			{
-				mapData[y][x] = 6;
-			}
-			if (x == 0 || x == DATA_MAX_X - 1)
-			{
-				mapData[y][x] = 6;
-			}
-		}
-	}
+	//for (int x = 0; x < DATA_MAX_X; x++)
+	//{
+	//	for (int y = 0; y < DATA_MAX_Y; y++)
+	//	{
+	//		mapData[y][x] = -1;
+	//		if (y == 0 || y == DATA_MAX_Y - 1)
+	//		{
+	//			mapData[y][x] = 6;
+	//		}
+	//		if (x == 0 || x == DATA_MAX_X - 1)
+	//		{
+	//			mapData[y][x] = 6;
+	//		}
+	//	}
+	//}
 }
 
 
@@ -253,16 +253,16 @@ void TetrisCtl(int atk)
 
 void TetrisDraw(void)
 {
-	for (int y = 0; y < DATA_MAX_Y; y++)
-	{
-		for (int x = 0; x < DATA_MAX_X; x++)
-		{
-			if (mapData[y][x] != -1)
-			{
-				DrawGraph((x - 1) * MINO_SIZE_X + 16, (y - 4) * MINO_SIZE_Y + 16, minoImage[mapData[y][x]], true);
-			}
-		}
-	}
+	//for (int y = 0; y < DATA_MAX_Y; y++)
+	//{
+	//	for (int x = 0; x < DATA_MAX_X; x++)
+	//	{
+	//		if (mapData[y][x] != -1)
+	//		{
+	//			DrawGraph((x - 1) * MINO_SIZE_X + 16, (y - 4) * MINO_SIZE_Y + 16, minoImage[mapData[y][x]], true);
+	//		}
+	//	}
+	//}
 	
 }
 
