@@ -49,7 +49,7 @@ int GameScene(void)
 	// ÃÄØ½Ctl‚É“n‚·ˆø”‚ÍA“G‚©‚çH‚ç‚¤‚»‚ÌÌÚ°Ñ‚ÌUŒ‚‚ÌÀŞÒ°¼Ş—ñ”
 	TetrisCtl(0);
 
-	EnemyCtl();
+	EnemyCtl(DamageCalc());
 	
 	GameDraw();
 
@@ -73,7 +73,7 @@ int DamageCalc(void)
 	int combo = TetrisCombo();
 	int damage = 0;
 	
-	damage = 100 * line * combo;
+	damage = DAMAGE * line * combo;
 
 	return damage;
 }

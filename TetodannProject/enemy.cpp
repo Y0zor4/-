@@ -3,10 +3,8 @@
 #include "keycheck.h"
 #include "enemy.h"
 
-
-//int enemyImage;
-int enemyLife;
-int enemyAttack;
+ENEMY enemy;
+//int enemyImage[];
 
 
 bool EnemySysInit(void)
@@ -18,32 +16,34 @@ bool EnemySysInit(void)
 
 void EnemyInit(void)
 {
-	
-	enemyLife = 500;
-	enemyAttack = 600;
+	enemy.LifeMax = 500;
+	enemy.Life = enemy.LifeMax;
+	enemy.Attack = 2;
+	enemy.cnt = 4;
 }
 
-void EnemyCtl(void)
+void EnemyCtl(int damage)
 {
-	//int damage = DamageCalc();
-	//if(enemyLife > 0)	enemyLife = enemyLife - damage;
+	if(enemy.Life > 0)enemy.Life = enemy.Life - damage;
 
 }
 
 void EnemyDraw(void)
 {
+	// “G‚Ì‘Ì—Í”’l
+	DrawFormatString(900, 30, 0xFFFFFF, "HP:%d/%d", enemy.Life, enemy.LifeMax);
+	
 	// “G‚Ì‘Ì—ÍƒQ[ƒW
-	DrawFormatString(900, 30, 0xFFFFFF, "100/100");
-	/*DrawBox(900, 90, 1300, 120, 0x000000, true);
-	DrawBox(900, 90, 1300, 120, 0x00FF00, true);
-	DrawBox(900, 90, 1300, 120, 0xFFFFFF, false);*/
+	DrawBox(700, 90, 1300, 130, 0x000000, true);
+	DrawBox(700, 90, 1300, 130, 0x00FF00, true);
+	DrawBox(700, 90, 1300, 130, 0xFFFFFF, false);
 
 	// “G‚ÌUŒ‚ƒQ[ƒW
-	/*DrawBox(800, 820, 1400, 850, 0x000000, true);
+	DrawBox(800, 820, 1400, 850, 0x000000, true);
 	DrawBox(800, 820, 1400, 850, 0xFF0000, true);
-	DrawBox(800, 820, 1400, 850, 0xFFFFFF, false);*/
+	DrawBox(800, 820, 1400, 850, 0xFFFFFF, false);
 
-	if (enemyLife > 0)
+	if (enemy.Life > 0)
 	{
 		// “G‚Ì‘ã‚í‚è
 		DrawBox(1000, 500, 1200, 800, 0xFFFFFF, true);
