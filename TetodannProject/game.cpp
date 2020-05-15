@@ -46,8 +46,11 @@ int GameScene(void)
 		rtn = 4;
 	}
 
-	TetrisCtl();
+	// ÃÄØ½Ctl‚É“n‚·ˆø”‚ÍA“G‚©‚çH‚ç‚¤‚»‚ÌÌÚ°Ñ‚ÌUŒ‚‚ÌÀŞÒ°¼Ş—ñ”
+	TetrisCtl(0);
+
 	EnemyCtl();
+	
 	GameDraw();
 
 	return rtn;

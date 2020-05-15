@@ -68,7 +68,7 @@ struct BLOCK
 bool TetrisSysInit(void);		// ÃÄØ½ŠÖ˜A¼½ÃÑŒn‰Šú‰»
 void TetrisInit(void);			// ÃÄØ½ŠÖ˜A‰Šú‰»
 void MinoInit(void);			// ĞÉî•ñ‰Šú‰»
-void TetrisCtl(void);
+void TetrisCtl(int atk);
 void TetrisDraw(void);
 
 int TetrisLine(void);			// Á‚µ‚½—ñ”‚ğ•Ô‚è’l‚Æ‚·‚éŠÖ”

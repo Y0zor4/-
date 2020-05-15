@@ -40,11 +40,11 @@ void TetrisInit(void)
 			mapData[y][x] = -1;
 			if (y == 0 || y == DATA_MAX_Y - 1)
 			{
-				mapData[y][x] = 7;
+				mapData[y][x] = 6;
 			}
 			if (x == 0 || x == DATA_MAX_X - 1)
 			{
-				mapData[y][x] = 7;
+				mapData[y][x] = 6;
 			}
 		}
 	}
@@ -231,7 +231,7 @@ void MinoInit(void)
 
 
 
-void TetrisCtl(void)
+void TetrisCtl(int atk)
 {
 	// 動かすブロックがあるかどうかのチェック
 	// なければ出現処理
