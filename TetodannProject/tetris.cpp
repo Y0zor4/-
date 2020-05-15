@@ -5,18 +5,21 @@
 
 int minoImage[MINO_MAX];					// ﾐﾉ画像
 
-int mapData[DATA_MAX_Y][DATA_MAX_X];		// ﾃﾞｰﾀ格納用
-int moveData[DATA_MAX_Y][DATA_MAX_X];
-int moveDataTmp[DATA_MAX_Y][DATA_MAX_X];
+int mapData[DATA_MAX_Y][DATA_MAX_X];		// ﾏｯﾌﾟﾃﾞｰﾀ格納用
+
+int moveData[DATA_MAX_Y][DATA_MAX_X];		// ﾏｯﾌﾟﾃﾞｰﾀに対するﾐﾉの情報格納用
 
 int typeBlock;								// ﾌﾞﾛｯｸの種類格納用
 BLOCK_DIR dir;								// ﾌﾞﾛｯｸの向き格納用
+BLOCK_DIR dirTmp;							// ﾌﾞﾛｯｸの向き格納用ﾊﾞｯｸｱｯﾌﾟ
 
+BLOCK blockType[BLOCK_TYPE_MAX];			// 移動中のﾐﾉ情報格納用
+BLOCK blockTypeTmp[BLOCK_TYPE_MAX];			// 移動中のﾐﾉ情報格納用ﾊﾞｯｸｱｯﾌﾟ
 
 BLOCK_TYPE next[BLOCK_TYPE_MAX];
 BLOCK_TYPE next2[BLOCK_TYPE_MAX];
 
-BLOCK blockType[BLOCK_TYPE_MAX];
+
 
 
 
@@ -41,7 +44,6 @@ void TetrisInit(void)
 		for (int y = 0; y < DATA_MAX_Y; y++)
 		{
 			moveData[y][x] = -1;
-			moveDataTmp[y][x] = -1;
 		}
 	}
 
@@ -244,6 +246,22 @@ void MinoInit(void)
 	blockType[BLOCK_TYPE_O].block[DIR_3][1][2] = 1;
 	blockType[BLOCK_TYPE_O].block[DIR_3][2][1] = 1;
 	blockType[BLOCK_TYPE_O].block[DIR_3][2][2] = 1;
+
+
+	// ﾊﾞｯｸｱｯﾌﾟ用の変数にも格納
+	for (int a = 0; a < BLOCK_TYPE_MAX; a++)
+	{
+		for (int b = 0; b < DIR_MAX; b++)
+		{
+			for (int c = 0; c < 4; c++)
+			{
+				for (int d = 0; d < 4; d++)
+				{
+					blockTypeTmp[a].block[b][c][d] = blockType[a].block[b][c][d];
+				}
+			}
+		}
+	}
 }
 
 
@@ -251,57 +269,24 @@ void MinoInit(void)
 void TetrisCtl(int atk)
 {
 	// 動かすブロックがあるかどうかのチェック
-	// なければ出現処理
 	if (!blockType[typeBlock].flag)
 	{
-		CreateMino();
+		CreateMino();			// なければ出現処理
 	}
+
 
 	// next2が空であれば、補充の処理
 
 
 
-	// 座標のバックアップ
-	MinoDataTmp();
-	MinoData();
+
+	// 移動、回転、当たり判定
+	MoveMino();				
+	
+	
 
 
-
-
-
-	// キー情報の移動処理
-	KeyMoveMino();
-	// Tmpに保存
-	MinoDataTmp();
-
-
-	// 当たり判定
-
-	// 当たり判定の後保存、反映
-	MinoData();
-
-
-
-	// キー情報の回転処理
-	KeyRotaMino();
-	// Tmpに保存
-	MinoDataTmp();
-
-
-	// 当たり判定
-
-	// 当たり判定の後保存、反映
-	MinoData();
-
-
-
-	// 自動の移動処理
-
-	// 当たり判定処理
-	// 当たっていればフラグを切り替える
-
-	// 座標の保存
-
+	// ﾐﾉ切り替え
 	if (CheckHitKey(KEY_INPUT_NUMPAD0))
 	{
 		blockType[typeBlock].flag = false;
@@ -320,15 +305,15 @@ void CreateMino(void)
 }
 
 
-// ﾐﾉ情報をmoveDataTmpへ
-void MinoDataTmp(void)
+// ﾐﾉ情報をmoveDataへ
+void MinoData(void)
 {
 	// 一度初期化
 	for (int x = 0; x < DATA_MAX_X; x++)
 	{
 		for (int y = 0; y < DATA_MAX_Y; y++)
 		{
-			moveDataTmp[y][x] = -1;
+			moveData[y][x] = -1;
 		}
 	}
 
@@ -339,42 +324,87 @@ void MinoDataTmp(void)
 		{
 			if (blockType[typeBlock].block[dir][y][x] != -1)
 			{
-				moveDataTmp[blockType[typeBlock].pos.y + y][blockType[typeBlock].pos.x + x] = typeBlock;
+				moveData[blockType[typeBlock].pos.y + y][blockType[typeBlock].pos.x + x] = typeBlock;
 			}
 		}
 	}
 }
 
 
-// tmp情報をmoveDataへ
-void MinoData(void)
+// ﾐﾉの制御
+void MoveMino(void)
 {
-	for (int x = 0; x < DATA_MAX_X; x++)
+	// 自動の移動処理
+	if (blockType[typeBlock].flag)
 	{
-		for (int y = 0; y < DATA_MAX_Y; y++)
+		MinoSave();			// 移動前のﾐﾉ情報保存
+		AutoMoveMino();			// 自動落下
+		MinoData();			// ﾃﾞｰﾀ保存
+		if (HitCheckMove())
 		{
-			moveData[y][x] = moveDataTmp[y][x];
+			MinoSaveRev();  // 当てっていればﾊﾞｯｸｱｯﾌﾟで上書き
+			MinoData();		// ﾃﾞｰﾀ保存
+			MapData();		// ﾏｯﾌﾟﾃﾞｰﾀへの保存
 		}
+		MinoData();			// 当たっていなければそのまま保存
+	}
+
+	// キー情報の下移動処理
+	if (blockType[typeBlock].flag)
+	{
+		MinoSave();			// 移動前のﾐﾉ情報保存
+		KeyMoveMinoDown();	// ｷｰ操作
+		MinoData();			// ﾃﾞｰﾀ保存
+		// 当たり判定
+		if (HitCheckMove())	// 保存したﾃﾞｰﾀで当たり判定
+		{
+			MinoSaveRev();  // 当てっていればﾊﾞｯｸｱｯﾌﾟで上書き
+			MinoData();		// ﾃﾞｰﾀ保存
+			MapData();		// ﾏｯﾌﾟﾃﾞｰﾀへの保存
+		}
+		MinoData();			// 当たっていなければそのまま保存
+	}
+
+	// キー情報の左右移動処理
+	if (blockType[typeBlock].flag)
+	{
+		MinoSave();			// 移動前のﾐﾉ情報保存
+		KeyMoveMinoLR();	// ｷｰ操作
+		MinoData();			// ﾃﾞｰﾀ保存
+		// 当たり判定
+		if (HitCheckMove())	// 保存したﾃﾞｰﾀで当たり判定
+		{
+			MinoSaveRev();  // 当てっていればﾊﾞｯｸｱｯﾌﾟで上書き
+		}
+		MinoData();			// 当たっていなければそのまま保存
+	}
+
+	// キー情報の回転処理
+	if (blockType[typeBlock].flag)
+	{
+		MinoSave();			// 移動前のﾐﾉ情報保存
+		KeyRotaMino();		// ｷｰ操作
+		MinoData();			// ﾃﾞｰﾀ保存
+		// 当たり判定
+		if (HitCheckMove())	// 保存したﾃﾞｰﾀで当たり判定
+		{
+			MinoSaveRev();  // 当てっていればﾊﾞｯｸｱｯﾌﾟで上書き
+		}
+		MinoData();		// 当たっていなければそのまま保存
 	}
 }
-
 
 
 // ﾐﾉ自動落下
-void MoveMino(void)
+void AutoMoveMino(void)
 {
 
 }
 
 
-// ﾐﾉ移動制御
-void KeyMoveMino(void)
+// ﾐﾉ左右移動制御
+void KeyMoveMinoLR(void)
 {
-	if (keyDownTrigger[KEY_ID_DOWN])
-	{
-		blockType[typeBlock].pos.y++;
-	}
-
 	if (keyDownTrigger[KEY_ID_RIGHT])
 	{
 		blockType[typeBlock].pos.x++;
@@ -387,22 +417,20 @@ void KeyMoveMino(void)
 }
 
 
+// ﾐﾉ下移動制御
+void KeyMoveMinoDown(void)
+{
+	if (keyDownTrigger[KEY_ID_S])
+	{
+		blockType[typeBlock].pos.y++;
+	}
+}
+
+
 // ﾐﾉ回転制御
 void KeyRotaMino(void)
 {
 	if (keyDownTrigger[KEY_ID_A])
-	{
-		if (dir < DIR_3)
-		{
-			dir = (BLOCK_DIR)(dir + 1);
-		}
-		else
-		{
-			dir = DIR_0;
-		}
-	}
-
-	if (keyDownTrigger[KEY_ID_D])
 	{
 		if (dir > 0)
 		{
@@ -413,23 +441,68 @@ void KeyRotaMino(void)
 			dir = DIR_3;
 		}
 	}
+
+	if (keyDownTrigger[KEY_ID_D])
+	{
+		if (dir < DIR_3)
+		{
+			dir = (BLOCK_DIR)(dir + 1);
+		}
+		else
+		{
+			dir = DIR_0;
+		}
+	}
 }
 
 
-
-// 当たり判定
-void HitCheckMove(void)
+// moveDataをmapDataへ
+void MapData(void)
 {
 	for (int x = 0; x < DATA_MAX_X; x++)
 	{
 		for (int y = 0; y < DATA_MAX_Y; y++)
 		{
-			if (moveDataTmp[y][x] != -1 && mapData[y][x] != -1)
+			if (moveData[y][x] != -1)
 			{
-
+				mapData[y][x] = moveData[y][x];
 			}
 		}
 	}
+	blockType[typeBlock].flag = false;
+}
+
+
+// 当たり判定
+bool HitCheckMove(void)
+{
+	for (int x = 0; x < DATA_MAX_X; x++)
+	{
+		for (int y = 0; y < DATA_MAX_Y; y++)
+		{
+			if (moveData[y][x] != -1 && mapData[y][x] != -1)
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+
+// ﾐﾉ情報のﾊﾞｯｸｱｯﾌﾟ
+void MinoSave(void)
+{
+	blockTypeTmp[typeBlock].pos = blockType[typeBlock].pos;
+	dirTmp = dir;
+}
+
+
+// ﾐﾉ情報をﾊﾞｯｸｱｯﾌﾟで上書き(移動取り消し)
+void MinoSaveRev(void)
+{
+	blockType[typeBlock].pos = blockTypeTmp[typeBlock].pos;
+	dir = dirTmp;
 }
 
 
@@ -450,9 +523,9 @@ void TetrisDraw(void)
 
 
 	// 固定ﾃﾞｰﾀ
-	for (int y = 0; y < DATA_MAX_Y; y++)
+	for (int y = 10; y < DATA_MAX_Y - 1; y++)
 	{
-		for (int x = 0; x < DATA_MAX_X; x++)
+		for (int x = 1; x < DATA_MAX_X - 1; x++)
 		{
 			if (mapData[y][x] != -1)
 			{
@@ -473,3 +546,4 @@ int TetrisCombo(void)
 	int combo = 0;
 	return combo;
 }
+

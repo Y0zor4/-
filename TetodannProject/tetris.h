@@ -68,15 +68,19 @@ struct BLOCK
 bool TetrisSysInit(void);		// ﾃﾄﾘｽ関連ｼｽﾃﾑ系初期化
 void TetrisInit(void);			// ﾃﾄﾘｽ関連初期化
 void MinoInit(void);			// ﾐﾉ情報初期化
-void TetrisCtl(int atk);
+void TetrisCtl(int atk);		// ﾃﾄﾘｽ全体処理
 void CreateMino(void);			// ﾐﾉ出現
-void MinoDataTmp(void);			// ﾐﾉ情報をmoveDataTmpへ
-void MinoData(void);			// tmp情報をmoveDataへ
-void MoveMino(void);			// ﾐﾉ自動落下
-void KeyMoveMino(void);			// ﾐﾉ移動制御
+void MinoData(void);			// ﾐﾉ情報をmoveDataへ
+void MoveMino(void);			// ﾐﾉの制御
+void AutoMoveMino(void);		// ﾐﾉ自動落下
+void KeyMoveMinoLR(void);		// ﾐﾉ左右移動制御
+void KeyMoveMinoDown(void);		// ﾐﾉ下移動制御
 void KeyRotaMino(void);			// ﾐﾉ回転制御
-void TetrisDraw(void);
-
+void MapData(void);				// moveDataをmapDataへ
+bool HitCheckMove(void);		// 当たり判定
+void MinoSave(void);			// ﾐﾉ情報のﾊﾞｯｸｱｯﾌﾟ
+void MinoSaveRev(void);			// ﾐﾉ情報をﾊﾞｯｸｱｯﾌﾟで上書き(移動取り消し)
+void TetrisDraw(void);			// 描画
 
 int TetrisLine(void);			// 消した列数を返り値とする関数
 int TetrisCombo(void);			// コンボ数を返り値とする関数
