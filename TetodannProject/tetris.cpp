@@ -283,7 +283,8 @@ void TetrisCtl(int atk)
 	// ˆÚ“®A‰ñ“]A“–‚½‚è”»’è
 	MoveMino();				
 	
-	
+	// ĞÉíœ
+	DisMino();
 
 
 	// ĞÉØ‚è‘Ö‚¦
@@ -487,6 +488,55 @@ bool HitCheckMove(void)
 		}
 	}
 	return false;
+}
+
+
+// ĞÉÁ–Åˆ—
+void DisMino(void)
+{
+	int lines[4];
+	int i = 0;
+	for (int j = 0; j < 4; j++)
+	{
+		lines[j] = -1;
+	}
+
+	for (int y = 10; y < DATA_MAX_Y - 1; y++)
+	{
+		if (DisMino2(y))
+		{
+			lines[i] = y;
+			i++;
+		}
+	}
+
+	// Á–Åˆ—
+	for (int j = 0; j < i; j++)
+	{
+		for (int x = 1; x < DATA_MAX_X - 1; x++)
+		{
+			mapData[lines[j]][x] = -1;
+			// ˆê’i‰º‚°‚é
+			for (int y = lines[j]; y > 8; y--)
+			{
+				mapData[y][x] = mapData[y - 1][x];
+			}
+		}
+	}
+}
+
+
+// ĞÉÁ–Åˆ—
+bool DisMino2(int y)
+{
+	for (int x = 1; x < DATA_MAX_X - 1; x++)
+	{
+		if (mapData[y][x] == -1)
+		{
+			return false;
+		}
+	}
+	return true;
 }
 
 

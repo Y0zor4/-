@@ -78,6 +78,8 @@ void KeyMoveMinoDown(void);		// ĞÉ‰ºˆÚ“®§Œä
 void KeyRotaMino(void);			// ĞÉ‰ñ“]§Œä
 void MapData(void);				// moveData‚ğmapData‚Ö
 bool HitCheckMove(void);		// “–‚½‚è”»’è
+void DisMino(void);				// ĞÉÁ–Åˆ—
+bool DisMino2(int y);			// ĞÉÁ–Åˆ—
 void MinoSave(void);			// ĞÉî•ñ‚ÌÊŞ¯¸±¯Ìß
 void MinoSaveRev(void);			// ĞÉî•ñ‚ğÊŞ¯¸±¯Ìß‚Åã‘‚«(ˆÚ“®æ‚èÁ‚µ)
 void TetrisDraw(void);			// •`‰æ
