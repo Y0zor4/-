@@ -1,9 +1,12 @@
 //#pragma once
 
-#define SCREEN_SIZE_X	1600		// ｽｸﾘｰﾝのX座標
-#define SCREEN_SIZE_Y	900			// ｽｸﾘｰﾝのY座標
+#define SCREEN_SIZE_X 1600			// ｽｸﾘｰﾝのX座標
+#define SCREEN_SIZE_Y 900			// ｽｸﾘｰﾝのY座標
 
-#define COLOR_BRIGHT	255			// 色の輝度
+
+#define FLOOR_MAX	  50			// 階層の上限
+
+
 
 
 //ｼｰﾝ管理用
