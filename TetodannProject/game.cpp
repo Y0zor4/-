@@ -73,7 +73,7 @@ int DamageCalc(void)
 	int combo = TetrisCombo();
 	int damage = 0;
 	
-	damage = 100 * line * combo;
+	damage = DAMAGE * line * combo;
 
 	return damage;
 }

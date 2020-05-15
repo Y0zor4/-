@@ -3,10 +3,8 @@
 #include "keycheck.h"
 #include "enemy.h"
 
-
-//int enemyImage;
-int enemyLife;
-int enemyAttack;
+//ENEMY enemy[ENEMY_MAX];
+//int enemyImage[];
 
 
 bool EnemySysInit(void)
@@ -19,8 +17,8 @@ bool EnemySysInit(void)
 void EnemyInit(void)
 {
 	
-	enemyLife = 500;
-	enemyAttack = 600;
+	/*enemyLife = 500;
+	enemyAttack = 600;*/
 }
 
 void EnemyCtl(void)
@@ -43,7 +41,7 @@ void EnemyDraw(void)
 	DrawBox(800, 820, 1400, 850, 0xFF0000, true);
 	DrawBox(800, 820, 1400, 850, 0xFFFFFF, false);*/
 
-	if (enemyLife > 0)
+	//if (enemyLife > 0)
 	{
 		// “G‚Ì‘ã‚í‚è
 		DrawBox(1000, 500, 1200, 800, 0xFFFFFF, true);
