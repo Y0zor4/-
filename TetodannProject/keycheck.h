@@ -2,12 +2,20 @@
 
 
 //“ü—Íî•ñ—p
-enum KEY_ID {
+enum KEY_ID 
+{
 	KEY_ID_SPACE,				//½Íß°½·°
 	KEY_ID_1,
 	KEY_ID_2,
 	KEY_ID_3,
 	KEY_ID_4,
+	KEY_ID_DOWN,
+	KEY_ID_LEFT,
+	KEY_ID_RIGHT,
+	KEY_ID_A,
+	KEY_ID_D,
+	KEY_ID_S,
+	KEY_ID_LSHIFT,
 	KEY_ID_MAX
 };
 

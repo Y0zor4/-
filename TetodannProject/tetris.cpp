@@ -6,9 +6,12 @@
 int minoImage[MINO_MAX];					// ﾐﾉ画像
 
 int mapData[DATA_MAX_Y][DATA_MAX_X];		// ﾃﾞｰﾀ格納用
-int typeBlock;								// ﾌﾞﾛｯｸの種類格納用
+int moveData[DATA_MAX_Y][DATA_MAX_X];
+int moveDataTmp[DATA_MAX_Y][DATA_MAX_X];
 
-int moveBlock[4][4];
+int typeBlock;								// ﾌﾞﾛｯｸの種類格納用
+BLOCK_DIR dir;								// ﾌﾞﾛｯｸの向き格納用
+
 
 BLOCK_TYPE next[BLOCK_TYPE_MAX];
 BLOCK_TYPE next2[BLOCK_TYPE_MAX];
@@ -33,21 +36,35 @@ bool TetrisSysInit(void)
 // ﾃﾄﾘｽ関連初期化
 void TetrisInit(void)
 {
-	//for (int x = 0; x < DATA_MAX_X; x++)
-	//{
-	//	for (int y = 0; y < DATA_MAX_Y; y++)
-	//	{
-	//		mapData[y][x] = -1;
-	//		if (y == 0 || y == DATA_MAX_Y - 1)
-	//		{
-	//			mapData[y][x] = 6;
-	//		}
-	//		if (x == 0 || x == DATA_MAX_X - 1)
-	//		{
-	//			mapData[y][x] = 6;
-	//		}
-	//	}
-	//}
+	for (int x = 0; x < DATA_MAX_X; x++)
+	{
+		for (int y = 0; y < DATA_MAX_Y; y++)
+		{
+			moveData[y][x] = -1;
+			moveDataTmp[y][x] = -1;
+		}
+	}
+
+
+	for (int x = 0; x < DATA_MAX_X; x++)
+	{
+		for (int y = 0; y < DATA_MAX_Y; y++)
+		{
+			mapData[y][x] = -1;
+			if (y == 0 || y == DATA_MAX_Y - 1)
+			{
+				mapData[y][x] = 7;
+			}
+			if (x == 0 || x == DATA_MAX_X - 1)
+			{
+				mapData[y][x] = 7;
+			}
+		}
+	}
+
+
+	// ﾐﾉ初期化
+	blockType[typeBlock].flag = false;	
 }
 
 
@@ -235,13 +252,48 @@ void TetrisCtl(int atk)
 {
 	// 動かすブロックがあるかどうかのチェック
 	// なければ出現処理
+	if (!blockType[typeBlock].flag)
+	{
+		CreateMino();
+	}
 
 	// next2が空であれば、補充の処理
 
-	// 座標のバックアップ
 
-	// キー情報の取得
-	// キー情報の移動処理、回転処理
+
+	// 座標のバックアップ
+	MinoDataTmp();
+	MinoData();
+
+
+
+
+
+	// キー情報の移動処理
+	KeyMoveMino();
+	// Tmpに保存
+	MinoDataTmp();
+
+
+	// 当たり判定
+
+	// 当たり判定の後保存、反映
+	MinoData();
+
+
+
+	// キー情報の回転処理
+	KeyRotaMino();
+	// Tmpに保存
+	MinoDataTmp();
+
+
+	// 当たり判定
+
+	// 当たり判定の後保存、反映
+	MinoData();
+
+
 
 	// 自動の移動処理
 
@@ -249,21 +301,165 @@ void TetrisCtl(int atk)
 	// 当たっていればフラグを切り替える
 
 	// 座標の保存
+
+	if (CheckHitKey(KEY_INPUT_NUMPAD0))
+	{
+		blockType[typeBlock].flag = false;
+	}
 }
+
+
+// ﾐﾉ出現
+void CreateMino(void)
+{
+	typeBlock = rand() % BLOCK_TYPE_MAX;
+	blockType[typeBlock].pos.x = 4;
+	blockType[typeBlock].pos.y = 9;
+	dir = DIR_0;
+	blockType[typeBlock].flag = true;
+}
+
+
+// ﾐﾉ情報をmoveDataTmpへ
+void MinoDataTmp(void)
+{
+	// 一度初期化
+	for (int x = 0; x < DATA_MAX_X; x++)
+	{
+		for (int y = 0; y < DATA_MAX_Y; y++)
+		{
+			moveDataTmp[y][x] = -1;
+		}
+	}
+
+	// 反映
+	for (int y = 0; y < 4; y++)
+	{
+		for (int x = 0; x < 4; x++)
+		{
+			if (blockType[typeBlock].block[dir][y][x] != -1)
+			{
+				moveDataTmp[blockType[typeBlock].pos.y + y][blockType[typeBlock].pos.x + x] = typeBlock;
+			}
+		}
+	}
+}
+
+
+// tmp情報をmoveDataへ
+void MinoData(void)
+{
+	for (int x = 0; x < DATA_MAX_X; x++)
+	{
+		for (int y = 0; y < DATA_MAX_Y; y++)
+		{
+			moveData[y][x] = moveDataTmp[y][x];
+		}
+	}
+}
+
+
+
+// ﾐﾉ自動落下
+void MoveMino(void)
+{
+
+}
+
+
+// ﾐﾉ移動制御
+void KeyMoveMino(void)
+{
+	if (keyDownTrigger[KEY_ID_DOWN])
+	{
+		blockType[typeBlock].pos.y++;
+	}
+
+	if (keyDownTrigger[KEY_ID_RIGHT])
+	{
+		blockType[typeBlock].pos.x++;
+	}
+
+	if (keyDownTrigger[KEY_ID_LEFT])
+	{
+		blockType[typeBlock].pos.x--;
+	}
+}
+
+
+// ﾐﾉ回転制御
+void KeyRotaMino(void)
+{
+	if (keyDownTrigger[KEY_ID_A])
+	{
+		if (dir < DIR_3)
+		{
+			dir = (BLOCK_DIR)(dir + 1);
+		}
+		else
+		{
+			dir = DIR_0;
+		}
+	}
+
+	if (keyDownTrigger[KEY_ID_D])
+	{
+		if (dir > 0)
+		{
+			dir = (BLOCK_DIR)(dir - 1);
+		}
+		else
+		{
+			dir = DIR_3;
+		}
+	}
+}
+
+
+
+// 当たり判定
+void HitCheckMove(void)
+{
+	for (int x = 0; x < DATA_MAX_X; x++)
+	{
+		for (int y = 0; y < DATA_MAX_Y; y++)
+		{
+			if (moveDataTmp[y][x] != -1 && mapData[y][x] != -1)
+			{
+
+			}
+		}
+	}
+}
+
+
 
 void TetrisDraw(void)
 {
-	//for (int y = 0; y < DATA_MAX_Y; y++)
-	//{
-	//	for (int x = 0; x < DATA_MAX_X; x++)
-	//	{
-	//		if (mapData[y][x] != -1)
-	//		{
-	//			DrawGraph((x - 1) * MINO_SIZE_X + 16, (y - 4) * MINO_SIZE_Y + 16, minoImage[mapData[y][x]], true);
-	//		}
-	//	}
-	//}
-	
+	// ﾑｰﾌﾞﾃﾞｰﾀ
+	for (int y = 10; y < DATA_MAX_Y - 1; y++)
+	{
+		for (int x = 1; x < DATA_MAX_X - 1; x++)
+		{
+			if (moveData[y][x] != -1)
+			{
+				DrawGraph((x - 1) * MINO_SIZE_X + 16, (y - 10) * MINO_SIZE_Y + 16, minoImage[moveData[y][x]], true);
+			}
+		}
+	}
+
+
+	// 固定ﾃﾞｰﾀ
+	for (int y = 0; y < DATA_MAX_Y; y++)
+	{
+		for (int x = 0; x < DATA_MAX_X; x++)
+		{
+			if (mapData[y][x] != -1)
+			{
+				DrawGraph((x - 1) * MINO_SIZE_X + 16, (y - 10) * MINO_SIZE_Y + 16, minoImage[mapData[y][x]], true);
+			}
+		}
+	}
 }
 
 int TetrisLine(void)
