@@ -3,7 +3,8 @@
 #include "keycheck.h"
 #include "enemy.h"
 
-ENEMY enemy;
+
+ENEMY enemy[ENEMY_MAX];
 //int enemyImage[];
 
 
@@ -16,22 +17,25 @@ bool EnemySysInit(void)
 
 void EnemyInit(void)
 {
-	enemy.LifeMax = 500;
-	enemy.Life = enemy.LifeMax;
-	enemy.Attack = 2;
-	enemy.cnt = 4;
+	for (int e = 0; e < ENEMY_MAX; e++)
+	{
+		enemy[e].LifeMax = 200;
+		enemy[e].Life = enemy[e].LifeMax;
+		enemy[e].Attack = 1;
+		enemy[e].cnt = 5;
+	}
 }
 
 void EnemyCtl(int damage)
 {
-	if(enemy.Life > 0)enemy.Life = enemy.Life - damage;
-
+	for (int e = 0; e < ENEMY_MAX; e++)
+	{
+		if (enemy[0].Life > 0)enemy[0].Life = enemy[0].Life - damage;
+	}
 }
 
 void EnemyDraw(void)
 {
-	// “G‚Ì‘Ì—Í”’l
-	DrawFormatString(900, 30, 0xFFFFFF, "HP:%d/%d", enemy.Life, enemy.LifeMax);
 	
 	// “G‚Ì‘Ì—ÍƒQ[ƒW
 	DrawBox(700, 90, 1300, 130, 0x000000, true);
@@ -43,12 +47,17 @@ void EnemyDraw(void)
 	DrawBox(800, 820, 1400, 850, 0xFF0000, true);
 	DrawBox(800, 820, 1400, 850, 0xFFFFFF, false);
 
-	if (enemy.Life > 0)
+	for (int e = 0; e < ENEMY_MAX; e++)
 	{
-		// “G‚Ì‘ã‚í‚è
-		DrawBox(1000, 500, 1200, 800, 0xFFFFFF, true);
-	}
+		// “G‚Ì‘Ì—Í”’l
+		DrawFormatString(900, 30, 0xFFFFFF, "HP:%d/%d", enemy[e].Life, enemy[e].LifeMax);
 
+		if (enemy[e].Life > 0)
+		{
+			// “G‚Ì‘ã‚í‚è
+			DrawBox(1000, 500, 1200, 800, 0xFFFFFF, true);
+		}
+	}
 }
 
 
