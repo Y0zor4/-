@@ -259,7 +259,7 @@ void TetrisDraw(void)
 		{
 			if (mapData[y][x] != -1)
 			{
-				DrawGraph((x - 1) * MINO_SIZE_X + 16, (y - 4) * MINO_SIZE_Y + 16, minoImage[mapData[y][x]], true);
+				DrawGraph((x - 1) * MINO_SIZE_X + 17, (y - 4) * MINO_SIZE_Y + 17, minoImage[mapData[y][x]], true);
 			}
 		}
 	}
