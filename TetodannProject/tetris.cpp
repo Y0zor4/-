@@ -20,6 +20,22 @@ BLOCK_TYPE next[BLOCK_TYPE_MAX];
 BLOCK_TYPE next2[BLOCK_TYPE_MAX];
 
 
+// そのﾌﾚｰﾑの消したﾗｲﾝ保存用
+int line;
+
+// ｺﾝﾎﾞ数保存用
+int combo;
+
+// 操作不能ｶｳﾝﾄ
+int dontCtlTime;
+
+// 何行目を消したか保存用
+int lines[4];		
+
+// 消したﾗｲﾝ数保存用
+int lineCnt;	
+
+
 
 
 
@@ -39,6 +55,7 @@ bool TetrisSysInit(void)
 // ﾃﾄﾘｽ関連初期化
 void TetrisInit(void)
 {
+	// ﾑｰﾌﾞﾃﾞｰﾀの初期化
 	for (int x = 0; x < DATA_MAX_X; x++)
 	{
 		for (int y = 0; y < DATA_MAX_Y; y++)
@@ -48,6 +65,7 @@ void TetrisInit(void)
 	}
 
 
+	// ﾏｯﾌﾟﾃﾞｰﾀの初期化
 	for (int x = 0; x < DATA_MAX_X; x++)
 	{
 		for (int y = 0; y < DATA_MAX_Y; y++)
@@ -67,6 +85,12 @@ void TetrisInit(void)
 
 	// ﾐﾉ初期化
 	blockType[typeBlock].flag = false;	
+
+	// その他変数
+	line = 0;
+	combo = 0;
+	dontCtlTime = 0;
+	lineCnt = 0;
 }
 
 
@@ -268,10 +292,24 @@ void MinoInit(void)
 
 void TetrisCtl(int atk)
 {
-	// 動かすブロックがあるかどうかのチェック
-	if (!blockType[typeBlock].flag)
+	// 初期化処理
+	line = 0;			// 毎ﾌﾚｰﾑのﾗｲﾝ数保存用
+
+	if (dontCtlTime <= 0)
 	{
-		CreateMino();			// なければ出現処理
+		for (int j = 0; j < 4; j++)
+		{
+			lines[j] = -1;	// 初期化用
+		}
+
+		dontCtlTime = 0;	// 移動不可時間ｶｳﾝﾄ
+		lineCnt = 0;		// 消したﾗｲﾝ数の保存用
+
+		// ﾐﾉが出現しているかどうかのﾁｪｯｸ
+		if (!blockType[typeBlock].flag)
+		{
+			CreateMino();			// なければ出現処理
+		}
 	}
 
 
@@ -291,6 +329,13 @@ void TetrisCtl(int atk)
 	if (CheckHitKey(KEY_INPUT_NUMPAD0))
 	{
 		blockType[typeBlock].flag = false;
+	}
+
+
+	// 移動不可時間の減算
+	if (dontCtlTime >= 0)
+	{
+		dontCtlTime--;
 	}
 }
 
@@ -421,7 +466,7 @@ void KeyMoveMinoLR(void)
 // ﾐﾉ下移動制御
 void KeyMoveMinoDown(void)
 {
-	if (keyDownTrigger[KEY_ID_S])
+	if (keyDownTrigger[KEY_ID_DOWN])
 	{
 		blockType[typeBlock].pos.y++;
 	}
@@ -494,32 +539,41 @@ bool HitCheckMove(void)
 // ﾐﾉ消滅処理
 void DisMino(void)
 {
-	int lines[4];
-	int i = 0;
-	for (int j = 0; j < 4; j++)
-	{
-		lines[j] = -1;
-	}
-
 	for (int y = 10; y < DATA_MAX_Y - 1; y++)
 	{
-		if (DisMino2(y))
+		if (DisMino2(y))	// 一行分のﾃﾞｰﾀがすべて埋まっていればtrueを返す。
 		{
-			lines[i] = y;
-			i++;
+			lines[lineCnt] = y;	// 何行目かの保存
+			lineCnt++;			// 消したﾗｲﾝ数の加算
+			dontCtlTime = DONT_CTL_TIME;
 		}
 	}
 
+
+
+
 	// 消滅処理
-	for (int j = 0; j < i; j++)
+	for (int j = 0; j < lineCnt; j++)
 	{
 		for (int x = 1; x < DATA_MAX_X - 1; x++)
 		{
 			mapData[lines[j]][x] = -1;
-			// 一段下げる
-			for (int y = lines[j]; y > 8; y--)
+			line = lineCnt;
+		}
+	}
+
+
+	// 一段下げる
+	if (dontCtlTime <= 1)
+	{
+		for (int j = 0; j < lineCnt; j++)
+		{
+			for (int x = 1; x < DATA_MAX_X - 1; x++)
 			{
-				mapData[y][x] = mapData[y - 1][x];
+				for (int y = lines[j]; y > 8; y--)
+				{
+					mapData[y][x] = mapData[y - 1][x];
+				}
 			}
 		}
 	}
@@ -560,13 +614,16 @@ void MinoSaveRev(void)
 void TetrisDraw(void)
 {
 	// ﾑｰﾌﾞﾃﾞｰﾀ
-	for (int y = 10; y < DATA_MAX_Y - 1; y++)
+	if (blockType[typeBlock].flag)
 	{
-		for (int x = 1; x < DATA_MAX_X - 1; x++)
+		for (int y = 10; y < DATA_MAX_Y - 1; y++)
 		{
-			if (moveData[y][x] != -1)
+			for (int x = 1; x < DATA_MAX_X - 1; x++)
 			{
-				DrawGraph((x - 1) * MINO_SIZE_X + 16, (y - 10) * MINO_SIZE_Y + 16, minoImage[moveData[y][x]], true);
+				if (moveData[y][x] != -1)
+				{
+					DrawGraph((x - 1) * MINO_SIZE_X + 16, (y - 10) * MINO_SIZE_Y + 16, minoImage[moveData[y][x]], true);
+				}
 			}
 		}
 	}
@@ -583,17 +640,18 @@ void TetrisDraw(void)
 			}
 		}
 	}
+
+	DrawFormatString(1000, 300, 0xFFFFFF, "Cnt : %d", dontCtlTime, true);
 }
 
 int TetrisLine(void)
 {
-	int line = 0;
+	
 	return line;
 }
 
 int TetrisCombo(void)
 {
-	int combo = 0;
 	return combo;
 }
 

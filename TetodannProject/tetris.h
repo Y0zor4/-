@@ -7,6 +7,8 @@
 #define MINO_SIZE_X 40
 #define MINO_SIZE_Y 40
 
+#define DONT_CTL_TIME 20		// ‘ЂЌм•s”\ЋћЉФ
+
 
 
 // МЮЫЇё‚МЋн—Ю
