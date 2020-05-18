@@ -665,20 +665,19 @@ void DisMino(void)
 	}
 
 
-	// Á–Åˆ—
-	for (int j = 0; j < lineCnt; j++)
-	{
-		for (int x = 1; x < DATA_MAX_X - 1; x++)
-		{
-			mapData[lines[j]][x] = -1;
-			line = lineCnt;
-		}
-	}
 
-
-	// ºİÎŞ‰ÁZ
 	if (putFlag)
 	{
+		// Á–Åˆ—
+		for (int j = 0; j < lineCnt; j++)
+		{
+			for (int x = 1; x < DATA_MAX_X - 1; x++)
+			{
+				mapData[lines[j]][x] = -1;
+				line = lineCnt;
+			}
+		}
+		// ºİÎŞ‰ÁZ
 		if (line != 0)
 		{
 			combo++;
