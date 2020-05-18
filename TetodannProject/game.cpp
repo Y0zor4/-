@@ -4,6 +4,8 @@
 #include "game.h"
 #include "tetris.h"
 #include "enemy.h"
+#include "background.h"
+
 
 int backImage;   // ｹﾞｰﾑの背景用(敵がいないところ)
 
@@ -21,6 +23,7 @@ bool GameSysInit(void)
 
 	if (!TetrisSysInit()) rtnFlag = false;
 	if (!EnemySysInit())  rtnFlag = false;
+	if (!BackgroundSysInit())  rtnFlag = false;
 
 	backImage = LoadGraph("Image/back_tmp.png");
 
@@ -29,8 +32,12 @@ bool GameSysInit(void)
 
 void GameInit(void)
 {
+	// 各制御の初期化
 	TetrisInit();
 	EnemyInit();
+	BackgroundInit();
+
+
 	floor = 1;
 	damage = 0;
 	life = GetEnemyLife();
@@ -81,9 +88,10 @@ void GameDraw(void)
 	ClsDrawScreen();
 	SetFontSize(50);
 	DrawFormatString(0, 0, 0xFFFFFF, "GameScene");
+	BackgroundDraw(floor);
+	EnemyDraw(floor);
 	DrawGraph(0, 0, backImage, true);
 	TetrisDraw();
-	EnemyDraw(floor);
 	DrawFormatString(1000, 200, 0xFFFFFF, "Damage:%d", DamageCalc());
 	DrawFormatString(1400, 90, 0xFFFFFF, "F%d", floor);
 	// 消した列とコンボ確認用
