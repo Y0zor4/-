@@ -86,5 +86,9 @@ void MinoSave(void);			// ﾐﾉ情報のﾊﾞｯｸｱｯﾌﾟ
 void MinoSaveRev(void);			// ﾐﾉ情報をﾊﾞｯｸｱｯﾌﾟで上書き(移動取り消し)
 void TetrisDraw(void);			// 描画
 
+
+bool CreateNext(int* nextBlock, int num); // next用
+void Hold(void);						  // hold用
+
 int TetrisLine(void);			// 消した列数を返り値とする関数
 int TetrisCombo(void);			// コンボ数を返り値とする関数

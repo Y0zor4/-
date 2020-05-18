@@ -16,10 +16,10 @@ BLOCK_DIR dirTmp;							// ﾌﾞﾛｯｸの向き格納用ﾊﾞｯｸｱｯﾌﾟ
 BLOCK blockType[BLOCK_TYPE_MAX];			// 移動中のﾐﾉ情報格納用
 BLOCK blockTypeTmp[BLOCK_TYPE_MAX];			// 移動中のﾐﾉ情報格納用ﾊﾞｯｸｱｯﾌﾟ
 
-BLOCK_TYPE next[BLOCK_TYPE_MAX];
-BLOCK_TYPE next2[BLOCK_TYPE_MAX];
+int next[BLOCK_TYPE_MAX];					// next保存用
+int next2[BLOCK_TYPE_MAX];					// next保存用2
 
-BLOCK_TYPE hold[BLOCK_TYPE_MAX];
+int hold;									// hold保存用
 
 
 // そのﾌﾚｰﾑの消したﾗｲﾝ保存用
@@ -39,6 +39,9 @@ int dontCtlTime;
 
 // ﾐﾉを置いたかどうかの判定用
 bool putFlag;
+
+// holdを利用したかどうか
+bool holdFlag;
 
 
 
@@ -87,15 +90,41 @@ void TetrisInit(void)
 	}
 
 
+	// next初期化
+	for (int i = 0; i < BLOCK_TYPE_MAX; i++)
+	{
+		next[i] = rand() % BLOCK_TYPE_MAX;
+		next2[i] = rand() % BLOCK_TYPE_MAX;
+		if (i > 0)
+		{
+			while (!CreateNext(next, i))
+			{
+				next[i] = rand() % BLOCK_TYPE_MAX;
+			}
+
+			while (!CreateNext(next2, i))
+			{
+				next2[i] = rand() % BLOCK_TYPE_MAX;
+			}
+		}
+	}
+
+
+	// hold初期化
+	hold = -1;
+
+
 	// ﾐﾉ初期化
 	blockType[typeBlock].flag = false;	
+
 
 	// その他変数
 	line = 0;
 	lineCnt = 0;
 	combo = 0;
 	dontCtlTime = 0;
-	putFlag = false;
+	putFlag = false; 
+	holdFlag = false;
 }
 
 
@@ -320,9 +349,24 @@ void TetrisCtl(int atk)
 
 
 	// next2が空であれば、補充の処理
+	if (next2[0] == -1)
+	{
+		for (int i = 0; i < BLOCK_TYPE_MAX; i++)
+		{
+			next2[i] = rand() % BLOCK_TYPE_MAX;
+			if (i > 0)
+			{
+				while (!CreateNext(next2, i))
+				{
+					next2[i] = rand() % BLOCK_TYPE_MAX;
+				}
+			}
+		}
+	}
 
 
-
+	// hold用
+	Hold();
 
 	// 移動、回転、当たり判定
 	MoveMino();				
@@ -346,14 +390,67 @@ void TetrisCtl(int atk)
 }
 
 
+// next用
+bool CreateNext(int* nextBlock, int num)
+{
+	for (int i = 0; i < num; i++)
+	{
+		if (nextBlock[i] == nextBlock[num])
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+
+// hold用
+void Hold(void)
+{
+	if (keyDownTrigger[KEY_ID_C] && !holdFlag)
+	{
+		if (hold == -1)
+		{
+			hold = typeBlock;
+			blockType[typeBlock].flag = false;
+		}
+		else
+		{
+			int tmp = typeBlock;
+			typeBlock = hold;
+			hold = tmp;
+			blockType[typeBlock].pos.x = 4;
+			blockType[typeBlock].pos.y = 9;
+			dir = DIR_0;
+			blockType[typeBlock].flag = true;
+			holdFlag = true;
+		}
+	}
+}
+
+
 // ﾐﾉ出現
 void CreateMino(void)
 {
-	typeBlock = rand() % BLOCK_TYPE_MAX;
+	typeBlock = next[0];
 	blockType[typeBlock].pos.x = 4;
 	blockType[typeBlock].pos.y = 9;
 	dir = DIR_0;
 	blockType[typeBlock].flag = true;
+
+	for (int i = 0; i < BLOCK_TYPE_MAX - 1; i++)
+	{
+		next[i] = next[i + 1];
+	}
+
+	next[BLOCK_TYPE_MAX - 1] = next2[0];
+
+	for (int i = 0; i < BLOCK_TYPE_MAX - 1; i++)
+	{
+		next2[i] = next2[i + 1];
+	}
+
+	next2[BLOCK_TYPE_MAX - 1] = -1;
 }
 
 
@@ -482,13 +579,17 @@ void KeyMoveMinoDown(void)
 	{
 		blockType[typeBlock].pos.y++;
 	}
+	else if (keyNew[KEY_ID_SPACE])
+	{
+		blockType[typeBlock].pos.y++;
+	}
 }
 
 
 // ﾐﾉ回転制御
 void KeyRotaMino(void)
 {
-	if (keyDownTrigger[KEY_ID_A])
+	if (keyDownTrigger[KEY_ID_Z])
 	{
 		if (dir > 0)
 		{
@@ -500,7 +601,7 @@ void KeyRotaMino(void)
 		}
 	}
 
-	if (keyDownTrigger[KEY_ID_D])
+	if (keyDownTrigger[KEY_ID_X])
 	{
 		if (dir < DIR_3)
 		{
@@ -529,6 +630,7 @@ void MapData(void)
 	}
 	blockType[typeBlock].flag = false;
 	putFlag = true;
+	holdFlag = false;
 }
 
 
@@ -647,7 +749,7 @@ void TetrisDraw(void)
 			{
 				if (moveData[y][x] != -1)
 				{
-					DrawGraph((x - 1) * MINO_SIZE_X + 16, (y - 10) * MINO_SIZE_Y + 16, minoImage[moveData[y][x]], true);
+					DrawGraph((x - 1) * MINO_SIZE_X + 152, (y - 10) * MINO_SIZE_Y + 16, minoImage[moveData[y][x]], true);
 				}
 			}
 		}
@@ -661,14 +763,54 @@ void TetrisDraw(void)
 		{
 			if (mapData[y][x] != -1)
 			{
-				DrawGraph((x - 1) * MINO_SIZE_X + 16, (y - 10) * MINO_SIZE_Y + 16, minoImage[mapData[y][x]], true);
+				DrawGraph((x - 1) * MINO_SIZE_X + 152, (y - 10) * MINO_SIZE_Y + 16, minoImage[mapData[y][x]], true);
 			}
 		}
 	}
 
-	/*DrawFormatString(1000, 200, 0xFFFFFF, "line : %d", lineCnt, true);
-	DrawFormatString(1000, 300, 0xFFFFFF, "Combo : %d", combo, true);*/
+
+	// next
+	for (int i = 0; i < BLOCK_TYPE_MAX; i++)
+	{
+		for (int y = 0; y < 4; y++)
+		{
+			for (int x = 0; x < 4; x++)
+			{
+				if (blockType[next[i]].block[DIR_0][y][x] != -1)
+				{
+					DrawExtendGraph(x * (MINO_SIZE_X / 2) + 628 - MINO_SIZE_X,
+						y * (MINO_SIZE_Y / 2) + 120 - (MINO_SIZE_Y / 2) + (MINO_SIZE_Y * 5 / 2) * i,
+						x * (MINO_SIZE_X / 2) + 628 + (MINO_SIZE_X / 2) - MINO_SIZE_X,
+						y * (MINO_SIZE_Y / 2) + 120 + (MINO_SIZE_Y / 2) - (MINO_SIZE_Y / 2) + (MINO_SIZE_Y * 5 / 2) * i,
+						minoImage[next[i]], true);
+				}
+			}
+		}	
+	}
+
+
+
+	// hold
+	if (hold != -1)
+	{
+		for (int y = 0; y < 4; y++)
+		{
+			for (int x = 0; x < 4; x++)
+			{
+				if (blockType[hold].block[DIR_0][y][x] != -1)
+				{
+					DrawExtendGraph(x * (MINO_SIZE_X / 2) + 76 - MINO_SIZE_X,
+						y * (MINO_SIZE_Y / 2) + 135 - (MINO_SIZE_Y / 2),
+						x * (MINO_SIZE_X / 2) + 76 + (MINO_SIZE_X / 2) - MINO_SIZE_X,
+						y * (MINO_SIZE_Y / 2) + 135 + (MINO_SIZE_Y / 2) - (MINO_SIZE_Y / 2),
+						minoImage[hold], true);
+				}
+			}
+		}
+	}
 }
+
+
 
 int TetrisLine(void)
 {

@@ -38,9 +38,9 @@ void KeyCheck(void)
 	keyNew[KEY_ID_DOWN] = CheckHitKey(KEY_INPUT_DOWN);
 	keyNew[KEY_ID_LEFT] = CheckHitKey(KEY_INPUT_LEFT);
 	keyNew[KEY_ID_RIGHT] = CheckHitKey(KEY_INPUT_RIGHT);
-	keyNew[KEY_ID_A] = CheckHitKey(KEY_INPUT_A);
-	keyNew[KEY_ID_D] = CheckHitKey(KEY_INPUT_D);
-	keyNew[KEY_ID_S] = CheckHitKey(KEY_INPUT_S);
+	keyNew[KEY_ID_Z] = CheckHitKey(KEY_INPUT_Z);
+	keyNew[KEY_ID_X] = CheckHitKey(KEY_INPUT_X);
+	keyNew[KEY_ID_C] = CheckHitKey(KEY_INPUT_C);
 	keyNew[KEY_ID_LSHIFT] = CheckHitKey(KEY_INPUT_LSHIFT);
 
 
