@@ -7,8 +7,8 @@
 
 int backImage;   // ¹Ş°Ñ‚Ì”wŒi—p(“G‚ª‚¢‚È‚¢‚Æ‚±‚ë)
 
-int line;
-int combo;
+int line_game;
+int combo_game;
 
 
 bool GameSysInit(void)
@@ -53,8 +53,8 @@ int GameScene(void)
 	// ÃÄØ½Ctl‚É“n‚·ˆø”‚ÍA“G‚©‚çH‚ç‚¤‚»‚ÌÌÚ°Ñ‚ÌUŒ‚‚ÌÀŞÒ°¼Ş—ñ”
 	TetrisCtl(0);
 
-	line = TetrisLine();
-	combo = TetrisCombo();
+	line_game = TetrisLine();
+	combo_game = TetrisCombo();
 
 	if (!FloorMove)
 	{
@@ -82,7 +82,7 @@ int DamageCalc(void)
 {
 	int damage = 0;
 	
-	damage = DAMAGE * line * combo;
+	damage = DAMAGE * line_game * combo_game;
 
 	return damage;
 }
