@@ -19,9 +19,17 @@ BLOCK blockTypeTmp[BLOCK_TYPE_MAX];			// 移動中のﾐﾉ情報格納用ﾊﾞｯｸｱｯﾌﾟ
 BLOCK_TYPE next[BLOCK_TYPE_MAX];
 BLOCK_TYPE next2[BLOCK_TYPE_MAX];
 
+BLOCK_TYPE hold[BLOCK_TYPE_MAX];
+
 
 // そのﾌﾚｰﾑの消したﾗｲﾝ保存用
 int line;
+
+// 何行目を消したか保存用
+int lines[4];
+
+// 消したﾗｲﾝ数保存用
+int lineCnt;
 
 // ｺﾝﾎﾞ数保存用
 int combo;
@@ -29,12 +37,8 @@ int combo;
 // 操作不能ｶｳﾝﾄ
 int dontCtlTime;
 
-// 何行目を消したか保存用
-int lines[4];		
-
-// 消したﾗｲﾝ数保存用
-int lineCnt;	
-
+// ﾐﾉを置いたかどうかの判定用
+bool putFlag;
 
 
 
@@ -88,9 +92,10 @@ void TetrisInit(void)
 
 	// その他変数
 	line = 0;
+	lineCnt = 0;
 	combo = 0;
 	dontCtlTime = 0;
-	lineCnt = 0;
+	putFlag = false;
 }
 
 
@@ -294,6 +299,7 @@ void TetrisCtl(int atk)
 {
 	// 初期化処理
 	line = 0;			// 毎ﾌﾚｰﾑのﾗｲﾝ数保存用
+	putFlag = false;    // そのﾌﾚｰﾑではまだ置いていないため初期化
 
 	if (dontCtlTime <= 0)
 	{
@@ -392,7 +398,10 @@ void MoveMino(void)
 			MinoData();		// ﾃﾞｰﾀ保存
 			MapData();		// ﾏｯﾌﾟﾃﾞｰﾀへの保存
 		}
-		MinoData();			// 当たっていなければそのまま保存
+		else
+		{
+			MinoData();			// 当たっていなければそのまま保存
+		}
 	}
 
 	// キー情報の下移動処理
@@ -408,7 +417,10 @@ void MoveMino(void)
 			MinoData();		// ﾃﾞｰﾀ保存
 			MapData();		// ﾏｯﾌﾟﾃﾞｰﾀへの保存
 		}
-		MinoData();			// 当たっていなければそのまま保存
+		else
+		{
+			MinoData();			// 当たっていなければそのまま保存
+		}
 	}
 
 	// キー情報の左右移動処理
@@ -516,6 +528,7 @@ void MapData(void)
 		}
 	}
 	blockType[typeBlock].flag = false;
+	putFlag = true;
 }
 
 
@@ -550,8 +563,6 @@ void DisMino(void)
 	}
 
 
-
-
 	// 消滅処理
 	for (int j = 0; j < lineCnt; j++)
 	{
@@ -559,6 +570,20 @@ void DisMino(void)
 		{
 			mapData[lines[j]][x] = -1;
 			line = lineCnt;
+		}
+	}
+
+
+	// ｺﾝﾎﾞ加算
+	if (putFlag)
+	{
+		if (line != 0)
+		{
+			combo++;
+		}
+		else
+		{
+			combo = 0;
 		}
 	}
 
@@ -641,12 +666,12 @@ void TetrisDraw(void)
 		}
 	}
 
-	DrawFormatString(1000, 300, 0xFFFFFF, "Cnt : %d", dontCtlTime, true);
+	/*DrawFormatString(1000, 200, 0xFFFFFF, "line : %d", lineCnt, true);
+	DrawFormatString(1000, 300, 0xFFFFFF, "Combo : %d", combo, true);*/
 }
 
 int TetrisLine(void)
 {
-	
 	return line;
 }
 
