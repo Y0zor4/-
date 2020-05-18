@@ -9,7 +9,10 @@ int backImage;   // ¹Ş°Ñ‚Ì”wŒi—p(“G‚ª‚¢‚È‚¢‚Æ‚±‚ë)
 
 int line_game;
 int combo_game;
+
 int floor;
+int life;
+
 
 bool GameSysInit(void)
 {
@@ -28,6 +31,8 @@ void GameInit(void)
 	TetrisInit();
 	EnemyInit();
 	floor = 1;
+	life = GetEnemyLife();
+
 }
 
 int GameScene(void)
@@ -57,9 +62,11 @@ int GameScene(void)
 	line_game = TetrisLine();
 	combo_game = TetrisCombo();
 
+
 	// ƒ_ƒ[ƒW‚ÆŒ»İ‚ÌŠK‘w‚ğˆø‚«“n‚·
-	EnemyCtl(DamageCalc());
-	
+	life = EnemyCtl(DamageCalc(), floor);
+
+
 	FloorMove();
 
 	GameDraw();
@@ -77,7 +84,8 @@ void GameDraw(void)
 	EnemyDraw(floor);
 	DrawFormatString(1000, 200, 0xFFFFFF, "Damage:%d", DamageCalc());
 	DrawFormatString(1400, 90, 0xFFFFFF, "F%d", floor);
-
+	// Á‚µ‚½—ñ‚ÆƒRƒ“ƒ{Šm”F—p
+	DrawFormatString(900, 300, 0xFFFFFF, "line combo : %d, %d", line_game, combo_game);
 	ScreenFlip();
 }
 
@@ -91,12 +99,10 @@ int DamageCalc(void)
 }
 
 // ŠK‘wˆÚ“®ˆ—
-int FloorMove(void)
+void FloorMove(void)
 {
-	int life = EnemyCtl(0);
 	if (life <= 0)
 	{
 		floor += 1;
 	}
-	return floor;
 }
