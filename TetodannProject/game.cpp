@@ -12,6 +12,7 @@ int combo_game;
 
 int floor;
 int life;
+int damage;
 
 
 bool GameSysInit(void)
@@ -31,6 +32,7 @@ void GameInit(void)
 	TetrisInit();
 	EnemyInit();
 	floor = 1;
+	damage = 0;
 	life = GetEnemyLife();
 
 }
@@ -61,10 +63,10 @@ int GameScene(void)
 
 	line_game = TetrisLine();
 	combo_game = TetrisCombo();
-
+	damage = DamageCalc();
 
 	// ƒ_ƒ[ƒW‚ÆŒ»İ‚ÌŠK‘w‚ğˆø‚«“n‚·
-	life = EnemyCtl(DamageCalc(), floor);
+	life = EnemyCtl(damage, floor);
 
 
 	FloorMove();
