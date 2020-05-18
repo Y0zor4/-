@@ -5,7 +5,6 @@
 
 struct ENEMY
 {
-	//int charType;			// “GƒLƒƒƒ‰‚Ìí—Ş
 	int Life;				// “G‚ÌŒ»İ‚Ì‘Ì—Í
 	int LifeMax;			// “G‚Ì‘Ì—ÍÅ‘å’l
 	int Attack;				// “G‚ÌUŒ‚—ÍiƒeƒgƒŠƒ~ƒm‚ÌoŒ»”j
@@ -15,5 +14,5 @@ struct ENEMY
 
 bool EnemySysInit(void);
 void EnemyInit(void);
-int EnemyCtl(int damage, int floor);
-void EnemyDraw(void);
+int EnemyCtl(int damage/*, int floor*/);
+void EnemyDraw(int floor);

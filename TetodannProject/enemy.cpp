@@ -20,7 +20,7 @@ void EnemyInit(void)
 {
 	for (int e = 0; e < ENEMY_MAX; e++)
 	{
-		enemy[e].LifeMax = 200;
+		enemy[e].LifeMax = 100 * (e + 1);
 		enemy[e].Life = enemy[e].LifeMax;
 		enemy[e].Attack = 1;
 		enemy[e].CntMax = 300;
@@ -29,7 +29,7 @@ void EnemyInit(void)
 }
 
 // “G‚Ìs“®§Œä
-int EnemyCtl(int damage, int floor)
+int EnemyCtl(int damage/*, int floor*/)
 {
 	for (int e = 0; e < ENEMY_MAX; e++)
 	{
@@ -45,29 +45,29 @@ int EnemyCtl(int damage, int floor)
 
 			enemy[e].Cnt = enemy[e].CntMax;
 		}
+		if (enemy[e].Life <= 0)enemy[e].Life = enemy[e].LifeMax;
 	}
 	return enemy->Life;
 }
 
 // “G‚Ì•`‰æ
-void EnemyDraw(void)
+void EnemyDraw(int floor)
 {
-	for (int e = 0; e < ENEMY_MAX; e++)
-	{
-		// “G‚Ì‘Ì—ÍƒQ[ƒW (Œã‚É•ÏX—L)
-		DrawBox(700, 90, 1300, 130, 0x000000, true);
-		DrawBox(700, 90, 1300, 130, 0x00FF00, true);
-		DrawBox(700, 90, 1300, 130, 0xFFFFFF, false);
+	// “G‚Ì‘Ì—ÍƒQ[ƒW (Œã‚É•ÏX—L)
+	DrawBox(700, 90, 1300, 130, 0x000000, true);
+	//DrawBox(700, 90, enemy[floor - 1].Life / (enemy[floor - 1].LifeMax / 600) + 700, 130, 0x00FF00, true);
+	DrawBox(700, 90, 1300, 130, 0xFFFFFF, false);
 
-		// “G‚ÌUŒ‚ƒQ[ƒWiŒã‚É•ÏX—Lj
-		DrawBox(800, 820, 1400, 850, 0x000000, true);
-		DrawBox(800, 820, 1400 - (1400 / enemy[e].Cnt), 850, 0xFF0000, true);
-		DrawBox(800, 820, 1400, 850, 0xFFFFFF, false);
+	// “G‚ÌUŒ‚ƒQ[ƒWiŒã‚É•ÏX—Lj
+	DrawBox(800, 820, 1400, 850, 0x000000, true);
+	DrawBox(800, 820, 1400, 850, 0xFF0000, true);
+	DrawBox(800, 820, 1400, 850, 0xFFFFFF, false);
 
 	
-		// “G‚Ì‘Ì—Í”’l
-		DrawFormatString(900, 30, 0xFFFFFF, "HP:%d/%d", enemy[e].Life, enemy[e].LifeMax);
-
+	// “G‚Ì‘Ì—Í”’l
+	DrawFormatString(900, 30, 0xFFFFFF, "HP:%d/%d", enemy[floor - 1].Life, enemy[floor - 1].LifeMax);
+	for (int e = 0; e < ENEMY_MAX; e++)
+	{
 
 		if (enemy[e].Life > 0)
 		{
