@@ -85,6 +85,7 @@ bool DisMino2(int y);			// ĞÉÁ–Åˆ—
 void MinoSave(void);			// ĞÉî•ñ‚ÌÊŞ¯¸±¯Ìß
 void MinoSaveRev(void);			// ĞÉî•ñ‚ğÊŞ¯¸±¯Ìß‚Åã‘‚«(ˆÚ“®æ‚èÁ‚µ)
 void TetrisDraw(void);			// •`‰æ
+void EnemyAtkBlock(int atk);	// “G‚ÌUŒ‚
 
 
 bool CreateNext(int* nextBlock, int num); // next—p

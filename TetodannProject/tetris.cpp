@@ -387,6 +387,8 @@ void TetrisCtl(int atk)
 	{
 		dontCtlTime--;
 	}
+
+	EnemyAtkBlock(atk);
 }
 
 
@@ -735,6 +737,30 @@ void MinoSaveRev(void)
 	dir = dirTmp;
 }
 
+
+// “G‚ÌUŒ‚
+void EnemyAtkBlock(int atk)
+{
+	for (int y = 10; y < DATA_MAX_Y - 1; y++)
+	{
+		for (int x = 1; x < DATA_MAX_X - 1; x++)
+		{
+			mapData[y - atk][x] = mapData[y][x];
+		}
+	}
+
+	int randLine = (rand() % 10) + 1;
+	for (int y = DATA_MAX_Y - 1 - atk; y < DATA_MAX_Y - 1; y++)
+	{
+		for (int x = 1; x < DATA_MAX_X - 1; x++)
+		{
+			if (x != randLine)
+			{
+				mapData[y][x] = 7;
+			}
+		}
+	}
+}
 
 
 void TetrisDraw(void)
