@@ -23,8 +23,7 @@ void EnemyInit(void)
 		enemy[e].LifeMax = 100 * (e + 1);
 		enemy[e].Life = enemy[e].LifeMax;
 		enemy[e].Attack = 1;
-		//enemy[e].CntMax = 300;
-		enemy[e].CntMax = 10;
+		enemy[e].CntMax = 500;
 		enemy[e].Cnt = enemy[e].CntMax;
 	}
 }
