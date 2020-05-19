@@ -15,7 +15,7 @@ int combo_game;		// ƒRƒ“ƒ{ŒvZ—p•Ï”
 int floor;			// ŠK‘wˆÚ“®—p•Ï”
 int life;			// “G‘Ì—ÍŠi”[—p•Ï”
 int damage;			// “G‚ªó‚¯‚éƒ_ƒ[ƒWŠi”[—p•Ï”
-int attack;	// “G‚ÌUŒ‚—ñ”
+int attack;			// “G‚ÌUŒ‚—ñ”
 
 bool GameSysInit(void)
 {
@@ -98,6 +98,7 @@ void GameDraw(void)
 	DrawFormatString(1400, 90, 0xFFFFFF, "F%d", floor);
 	// Á‚µ‚½—ñ‚ÆƒRƒ“ƒ{Šm”F—p
 	DrawFormatString(900, 300, 0xFFFFFF, "line combo : %d, %d", line_game, combo_game);
+	// “G‚©‚çTetrisCtl‚É“n‚³‚ê‚é—ñ”Šm”F—p
 	DrawFormatString(900, 350, 0xFFFFFF, "atk : %d", attack);
 
 	ScreenFlip();
@@ -115,8 +116,5 @@ int DamageCalc(void)
 // ŠK‘wˆÚ“®ˆ—
 void FloorMove(void)
 {
-	if (life <= 0)
-	{
-		floor += 1;
-	}
+	if (life <= 0)floor += 1;	
 }

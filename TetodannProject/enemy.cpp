@@ -23,7 +23,8 @@ void EnemyInit(void)
 		enemy[e].LifeMax = 100 * (e + 1);
 		enemy[e].Life = enemy[e].LifeMax;
 		enemy[e].Attack = 1;
-		enemy[e].CntMax = 300;
+		//enemy[e].CntMax = 300;
+		enemy[e].CntMax = 10;
 		enemy[e].Cnt = enemy[e].CntMax;
 	}
 }
@@ -38,9 +39,6 @@ int EnemyCtl(int damage, int floor)
 	// “G‚ÌUŒ‚ŠÖ˜A
 	if (enemy[floor - 1].Cnt > 0)enemy[floor - 1].Cnt--;
 
-	
-	
-	
 	return enemy[floor - 1].Life;
 }
 
@@ -80,10 +78,10 @@ int GetAttackLines(int floor)
 {
 	if (enemy[floor - 1].Cnt <= 0)
 	{
-		enemy[floor - 1].Cnt = enemy[floor - 1].CntMax;
+ 		enemy[floor - 1].Cnt = enemy[floor - 1].CntMax;
 		return enemy[floor - 1].Attack;
 	}
-	
+	return 0;
 }
 
 
