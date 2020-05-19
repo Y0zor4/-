@@ -9,12 +9,15 @@ int mapData[DATA_MAX_Y][DATA_MAX_X];		// ﾏｯﾌﾟﾃﾞｰﾀ格納用
 
 int moveData[DATA_MAX_Y][DATA_MAX_X];		// ﾏｯﾌﾟﾃﾞｰﾀに対するﾐﾉの情報格納用
 
+int downData[DATA_MAX_Y][DATA_MAX_X];		// ﾏｯﾌﾟﾃﾞｰﾀに対する予測落下地点の情報格納用
+
 int typeBlock;								// ﾌﾞﾛｯｸの種類格納用
 BLOCK_DIR dir;								// ﾌﾞﾛｯｸの向き格納用
 BLOCK_DIR dirTmp;							// ﾌﾞﾛｯｸの向き格納用ﾊﾞｯｸｱｯﾌﾟ
 
 BLOCK blockType[BLOCK_TYPE_MAX];			// 移動中のﾐﾉ情報格納用
 BLOCK blockTypeTmp[BLOCK_TYPE_MAX];			// 移動中のﾐﾉ情報格納用ﾊﾞｯｸｱｯﾌﾟ
+BLOCK blockTypeDown[BLOCK_TYPE_MAX];		// 予測落下地点のﾐﾉ情報格納用
 
 int next[BLOCK_TYPE_MAX];					// next保存用
 int next2[BLOCK_TYPE_MAX];					// next保存用2
@@ -43,6 +46,9 @@ bool putFlag;
 // holdを利用したかどうか
 bool holdFlag;
 
+// ﾐﾉ自動落下用
+int minoCnt;
+
 
 
 
@@ -62,12 +68,13 @@ bool TetrisSysInit(void)
 // ﾃﾄﾘｽ関連初期化
 void TetrisInit(void)
 {
-	// ﾑｰﾌﾞﾃﾞｰﾀの初期化
+	// ﾑｰﾌﾞﾃﾞｰﾀ、予測落下地点の初期化
 	for (int x = 0; x < DATA_MAX_X; x++)
 	{
 		for (int y = 0; y < DATA_MAX_Y; y++)
 		{
 			moveData[y][x] = -1;
+			downData[y][x] = -1;
 		}
 	}
 
@@ -123,6 +130,7 @@ void TetrisInit(void)
 	lineCnt = 0;
 	combo = 0;
 	dontCtlTime = 0;
+	minoCnt = 0;
 	putFlag = false; 
 	holdFlag = false;
 }
@@ -316,6 +324,7 @@ void MinoInit(void)
 				for (int d = 0; d < 4; d++)
 				{
 					blockTypeTmp[a].block[b][c][d] = blockType[a].block[b][c][d];
+					blockTypeDown[a].block[b][c][d] = blockType[a].block[b][c][d];
 				}
 			}
 		}
@@ -386,6 +395,11 @@ void TetrisCtl(int atk)
 	if (dontCtlTime >= 0)
 	{
 		dontCtlTime--;
+	}
+
+	if (atk != 0)
+	{
+		EnemyAtkBlock(atk);
 	}
 }
 
@@ -483,6 +497,21 @@ void MinoData(void)
 // ﾐﾉの制御
 void MoveMino(void)
 {
+
+	// キー情報の回転処理
+	if (blockType[typeBlock].flag)
+	{
+		MinoSave();			// 移動前のﾐﾉ情報保存
+		KeyRotaMino();		// ｷｰ操作
+		MinoData();			// ﾃﾞｰﾀ保存
+		// 当たり判定
+		if (HitCheckMove())	// 保存したﾃﾞｰﾀで当たり判定
+		{
+			MinoSaveRev();  // 当てっていればﾊﾞｯｸｱｯﾌﾟで上書き
+		}
+		MinoData();		// 当たっていなければそのまま保存
+	}
+
 	// 自動の移動処理
 	if (blockType[typeBlock].flag)
 	{
@@ -534,26 +563,22 @@ void MoveMino(void)
 		MinoData();			// 当たっていなければそのまま保存
 	}
 
-	// キー情報の回転処理
-	if (blockType[typeBlock].flag)
-	{
-		MinoSave();			// 移動前のﾐﾉ情報保存
-		KeyRotaMino();		// ｷｰ操作
-		MinoData();			// ﾃﾞｰﾀ保存
-		// 当たり判定
-		if (HitCheckMove())	// 保存したﾃﾞｰﾀで当たり判定
-		{
-			MinoSaveRev();  // 当てっていればﾊﾞｯｸｱｯﾌﾟで上書き
-		}
-		MinoData();		// 当たっていなければそのまま保存
-	}
+	// 予測落下地点決定
+	MinoPreDown();
+
+	// 最下移動処理
+	KeyMoveMinoHardDown();
 }
 
 
 // ﾐﾉ自動落下
 void AutoMoveMino(void)
 {
-
+	minoCnt++;
+	if (minoCnt % 30 == 0)
+	{
+		blockType[typeBlock].pos.y++;
+	}
 }
 
 
@@ -579,12 +604,29 @@ void KeyMoveMinoDown(void)
 	{
 		blockType[typeBlock].pos.y++;
 	}
-	else if (keyNew[KEY_ID_SPACE])
-	{
-		blockType[typeBlock].pos.y++;
-	}
 }
 
+
+// ﾐﾉ最下移動制御
+void KeyMoveMinoHardDown(void)
+{
+	if (keyDownTrigger[KEY_ID_SPACE])
+	{
+		for (int x = 0; x < DATA_MAX_X; x++)
+		{
+			for (int y = 0; y < DATA_MAX_Y; y++)
+			{
+				if (downData[y][x] != -1)
+				{
+					mapData[y][x] = downData[y][x];
+				}
+			}
+		}
+		blockType[typeBlock].flag = false;
+		putFlag = true;
+		holdFlag = false;
+	}
+}
 
 // ﾐﾉ回転制御
 void KeyRotaMino(void)
@@ -736,6 +778,115 @@ void MinoSaveRev(void)
 }
 
 
+// 敵の攻撃
+void EnemyAtkBlock(int atk)
+{
+	for (int y = 10; y < DATA_MAX_Y - 1; y++)
+	{
+		for (int x = 1; x < DATA_MAX_X - 1; x++)
+		{
+			mapData[y - atk][x] = mapData[y][x];
+		}
+	}
+
+	for (int y = DATA_MAX_Y - atk - 1; y < DATA_MAX_Y - 1; y++)
+	{
+		for (int x = 1; x < DATA_MAX_X - 1; x++)
+		{
+			mapData[y][x] = -1;
+		}
+	}
+
+	int randLine = (rand() % 10) + 1;
+	for (int y = DATA_MAX_Y - atk - 1; y < DATA_MAX_Y - 1; y++)
+	{
+		for (int x = 1; x < DATA_MAX_X - 1; x++)
+		{
+			if (x != randLine)
+			{
+				mapData[y][x] = 7;
+			}
+		}
+	}
+}
+
+
+// ﾐﾉの予測落下地点
+void MinoPreDown(void)
+{
+	if (blockType[typeBlock].flag)
+	{
+		// 座標代入
+		blockTypeDown[typeBlock].pos = blockType[typeBlock].pos;
+
+		// 当たるまでY座標を+
+		while (!HitCheckPreDown())
+		{
+			blockTypeDown[typeBlock].pos.y++;
+
+			for (int x = 0; x < DATA_MAX_X; x++)
+			{
+				for (int y = 0; y < DATA_MAX_Y; y++)
+				{
+					downData[y][x] = -1;
+				}
+			}
+
+			for (int y = 0; y < 4; y++)
+			{
+				for (int x = 0; x < 4; x++)
+				{
+					if (blockTypeDown[typeBlock].block[dir][y][x] != -1)
+					{
+						downData[blockTypeDown[typeBlock].pos.y + y][blockTypeDown[typeBlock].pos.x + x] = typeBlock;
+					}
+				}
+			}
+		}
+		
+		// 当たった後の座標補正
+		blockTypeDown[typeBlock].pos.y--;
+
+
+		// Downに保存
+		for (int x = 0; x < DATA_MAX_X; x++)
+		{
+			for (int y = 0; y < DATA_MAX_Y; y++)
+			{
+				downData[y][x] = -1;
+			}
+		}
+
+		for (int y = 0; y < 4; y++)
+		{
+			for (int x = 0; x < 4; x++)
+			{
+				if (blockTypeDown[typeBlock].block[dir][y][x] != -1)
+				{
+					downData[blockTypeDown[typeBlock].pos.y + y][blockTypeDown[typeBlock].pos.x + x] = typeBlock;
+				}
+			}
+		}
+	}
+}
+
+
+// 当たり判定最下落下用
+bool HitCheckPreDown(void)
+{
+	for (int x = 0; x < DATA_MAX_X; x++)
+	{
+		for (int y = 0; y < DATA_MAX_Y; y++)
+		{
+			if (downData[y][x] != -1 && mapData[y][x] != -1)
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 
 void TetrisDraw(void)
 {
@@ -807,6 +958,26 @@ void TetrisDraw(void)
 			}
 		}
 	}
+
+
+	// 予測落下地点表示
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 122);
+
+	if (blockType[typeBlock].flag)
+	{
+		for (int y = 10; y < DATA_MAX_Y - 1; y++)
+		{
+			for (int x = 1; x < DATA_MAX_X - 1; x++)
+			{
+				if (downData[y][x] != -1)
+				{
+					DrawGraph((x - 1) * MINO_SIZE_X + 152, (y - 10) * MINO_SIZE_Y + 16, minoImage[downData[y][x]], true);
+				}
+			}
+		}
+	}
+
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
 
