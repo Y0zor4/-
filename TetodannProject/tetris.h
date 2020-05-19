@@ -77,6 +77,7 @@ void MoveMino(void);			// ﾐﾉの制御
 void AutoMoveMino(void);		// ﾐﾉ自動落下
 void KeyMoveMinoLR(void);		// ﾐﾉ左右移動制御
 void KeyMoveMinoDown(void);		// ﾐﾉ下移動制御
+void KeyMoveMinoHardDown(void); // ﾐﾉ最下移動制御
 void KeyRotaMino(void);			// ﾐﾉ回転制御
 void MapData(void);				// moveDataをmapDataへ
 bool HitCheckMove(void);		// 当たり判定
@@ -86,6 +87,8 @@ void MinoSave(void);			// ﾐﾉ情報のﾊﾞｯｸｱｯﾌﾟ
 void MinoSaveRev(void);			// ﾐﾉ情報をﾊﾞｯｸｱｯﾌﾟで上書き(移動取り消し)
 void TetrisDraw(void);			// 描画
 void EnemyAtkBlock(int atk);	// 敵の攻撃
+void MinoPreDown(void);			// ﾐﾉの予測落下地点
+bool HitCheckPreDown(void);		// 当たり判定最下落下用
 
 
 bool CreateNext(int* nextBlock, int num); // next用
