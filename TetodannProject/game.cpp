@@ -7,15 +7,15 @@
 #include "background.h"
 
 
-int backImage;   // ¹Ş°Ñ‚Ì”wŒi—p(“G‚ª‚¢‚È‚¢‚Æ‚±‚ë)
+int backImage;		// ¹Ş°Ñ‚Ì”wŒi—p(“G‚ª‚¢‚È‚¢‚Æ‚±‚ë)
 
-int line_game;
-int combo_game;
+int line_game;		// —ñŒvZ—p•Ï”
+int combo_game;		// ƒRƒ“ƒ{ŒvZ—p•Ï”
 
-int floor;
-int life;
-int damage;
-
+int floor;			// ŠK‘wˆÚ“®—p•Ï”
+int life;			// “G‘Ì—ÍŠi”[—p•Ï”
+int damage;			// “G‚ªó‚¯‚éƒ_ƒ[ƒWŠi”[—p•Ï”
+int attack;	// “G‚ÌUŒ‚—ñ”
 
 bool GameSysInit(void)
 {
@@ -41,6 +41,7 @@ void GameInit(void)
 	floor = 1;
 	damage = 0;
 	life = GetEnemyLife();
+	attack = 0;
 
 }
 
@@ -66,7 +67,7 @@ int GameScene(void)
 	}
 
 	// ÃÄØ½Ctl‚É“n‚·ˆø”‚ÍA“G‚©‚çH‚ç‚¤‚»‚ÌÌÚ°Ñ‚ÌUŒ‚‚ÌÀŞÒ°¼Ş—ñ”
-	TetrisCtl(0);
+	TetrisCtl(attack);
 
 	line_game = TetrisLine();
 	combo_game = TetrisCombo();
@@ -75,6 +76,7 @@ int GameScene(void)
 	// ƒ_ƒ[ƒW‚ÆŒ»İ‚ÌŠK‘w‚ğˆø‚«“n‚·
 	life = EnemyCtl(damage, floor);
 
+	attack = GetAttackLines(floor);
 
 	FloorMove();
 
@@ -89,13 +91,15 @@ void GameDraw(void)
 	SetFontSize(50);
 	DrawFormatString(0, 0, 0xFFFFFF, "GameScene");
 	BackgroundDraw(floor);
-	EnemyDraw(floor);
 	DrawGraph(0, 0, backImage, true);
+	EnemyDraw(floor);
 	TetrisDraw();
 	DrawFormatString(1000, 200, 0xFFFFFF, "Damage:%d", DamageCalc());
 	DrawFormatString(1400, 90, 0xFFFFFF, "F%d", floor);
 	// Á‚µ‚½—ñ‚ÆƒRƒ“ƒ{Šm”F—p
 	DrawFormatString(900, 300, 0xFFFFFF, "line combo : %d, %d", line_game, combo_game);
+	DrawFormatString(900, 350, 0xFFFFFF, "atk : %d", attack);
+
 	ScreenFlip();
 }
 
