@@ -388,7 +388,10 @@ void TetrisCtl(int atk)
 		dontCtlTime--;
 	}
 
-	EnemyAtkBlock(atk);
+	if (atk != 0)
+	{
+		EnemyAtkBlock(atk);
+	}
 }
 
 
@@ -485,6 +488,21 @@ void MinoData(void)
 // ﾐﾉの制御
 void MoveMino(void)
 {
+
+	// キー情報の回転処理
+	if (blockType[typeBlock].flag)
+	{
+		MinoSave();			// 移動前のﾐﾉ情報保存
+		KeyRotaMino();		// ｷｰ操作
+		MinoData();			// ﾃﾞｰﾀ保存
+		// 当たり判定
+		if (HitCheckMove())	// 保存したﾃﾞｰﾀで当たり判定
+		{
+			MinoSaveRev();  // 当てっていればﾊﾞｯｸｱｯﾌﾟで上書き
+		}
+		MinoData();		// 当たっていなければそのまま保存
+	}
+
 	// 自動の移動処理
 	if (blockType[typeBlock].flag)
 	{
@@ -534,20 +552,6 @@ void MoveMino(void)
 			MinoSaveRev();  // 当てっていればﾊﾞｯｸｱｯﾌﾟで上書き
 		}
 		MinoData();			// 当たっていなければそのまま保存
-	}
-
-	// キー情報の回転処理
-	if (blockType[typeBlock].flag)
-	{
-		MinoSave();			// 移動前のﾐﾉ情報保存
-		KeyRotaMino();		// ｷｰ操作
-		MinoData();			// ﾃﾞｰﾀ保存
-		// 当たり判定
-		if (HitCheckMove())	// 保存したﾃﾞｰﾀで当たり判定
-		{
-			MinoSaveRev();  // 当てっていればﾊﾞｯｸｱｯﾌﾟで上書き
-		}
-		MinoData();		// 当たっていなければそのまま保存
 	}
 }
 
@@ -749,8 +753,16 @@ void EnemyAtkBlock(int atk)
 		}
 	}
 
+	for (int y = DATA_MAX_Y - atk - 1; y < DATA_MAX_Y - 1; y++)
+	{
+		for (int x = 1; x < DATA_MAX_X - 1; x++)
+		{
+			mapData[y][x] = -1;
+		}
+	}
+
 	int randLine = (rand() % 10) + 1;
-	for (int y = DATA_MAX_Y - 1 - atk; y < DATA_MAX_Y - 1; y++)
+	for (int y = DATA_MAX_Y - atk - 1; y < DATA_MAX_Y - 1; y++)
 	{
 		for (int x = 1; x < DATA_MAX_X - 1; x++)
 		{
