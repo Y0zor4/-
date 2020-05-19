@@ -38,13 +38,7 @@ int EnemyCtl(int damage, int floor)
 	// “G‚ÌUŒ‚ŠÖ˜A
 	if (enemy[floor - 1].Cnt > 0)enemy[floor - 1].Cnt--;
 
-	if (enemy[floor - 1].Cnt <= 0)
-	{
-		// “G‚ÌUŒ‚ˆ—iƒeƒgƒŠƒ~ƒm‚ðUŒ‚—Í•ª—N‚©‚¹‚éj
-		// = enemy[e].Attack;
-
-		enemy[floor - 1].Cnt = enemy[floor - 1].CntMax;
-	}
+	
 	
 	
 	return enemy[floor - 1].Life;
@@ -60,7 +54,7 @@ void EnemyDraw(int floor)
 
 	// “G‚ÌUŒ‚ƒQ[ƒWiŒã‚É•ÏX—Lj
 	DrawBox(800, 820, 1400, 850, 0x000000, true);
-	DrawBox(800, 820, 1400, 850, 0xFF0000, true);
+	DrawBox(800, 820, 600 * enemy[floor - 1].Cnt / enemy[floor - 1].CntMax + 800, 850, 0xFF0000, true);
 	DrawBox(800, 820, 1400, 850, 0xFFFFFF, false);
 
 	
@@ -76,9 +70,20 @@ void EnemyDraw(int floor)
 	
 }
 
+
 int GetEnemyLife(void)
 {
 	return enemy[0].LifeMax;
+}
+
+int GetAttackLines(int floor)
+{
+	if (enemy[floor - 1].Cnt <= 0)
+	{
+		enemy[floor - 1].Cnt = enemy[floor - 1].CntMax;
+		return enemy[floor - 1].Attack;
+	}
+	
 }
 
 

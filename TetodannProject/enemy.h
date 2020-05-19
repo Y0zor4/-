@@ -7,7 +7,7 @@ struct ENEMY
 {
 	int Life;				// 敵の現在の体力
 	int LifeMax;			// 敵の体力最大値
-	int Attack;				// 敵の攻撃力（テトリミノの出現数）
+	int Attack;				// 敵の攻撃力（テトリミノの出現列数）
 	int Cnt;				// 敵毎の攻撃速度用カウント
 	int CntMax;				// 敵毎の攻撃カウント最大数
 };
@@ -17,3 +17,4 @@ void EnemyInit(void);
 int EnemyCtl(int damage, int floor);
 void EnemyDraw(int floor);
 int GetEnemyLife(void);
+int GetAttackLines(int floor);
