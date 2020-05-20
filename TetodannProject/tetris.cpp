@@ -378,10 +378,19 @@ void TetrisCtl(int atk)
 	Hold();
 
 	// 移動、回転、当たり判定
-	MoveMino();				
+	MoveMino();
+
+	// 敵の攻撃
+	if (atk != 0)
+	{
+		EnemyAtkBlock(atk);
+	}
 	
 	// ﾐﾉ削除
 	DisMino();
+
+
+
 
 
 	// ﾐﾉ切り替え
@@ -397,10 +406,15 @@ void TetrisCtl(int atk)
 		dontCtlTime--;
 	}
 
-	if (atk != 0)
-	{
-		EnemyAtkBlock(atk);
-	}
+
+	// バグ防止
+	//for (int y = 1; y < 6; y++)
+	//{
+	//	for (int x = 1; x < DATA_MAX_X - 1; x++)
+	//	{
+	//		moveData[y][x] = -1;
+	//	}
+	//}
 }
 
 
@@ -497,7 +511,6 @@ void MinoData(void)
 // ﾐﾉの制御
 void MoveMino(void)
 {
-
 	// キー情報の回転処理
 	if (blockType[typeBlock].flag)
 	{
@@ -808,6 +821,23 @@ void EnemyAtkBlock(int atk)
 			}
 		}
 	}
+
+	// ﾗｲﾝを上げる
+	for (int j = 0; j < lineCnt; j++)
+	{
+		lines[j] -= atk;
+	}
+
+	// ﾑｰﾌﾞﾃﾞｰﾀ補正
+	if (HitCheckMove())
+	{
+		while (HitCheckMove())
+		{
+			blockType[typeBlock].pos.y--;
+			MinoData();
+		}
+		MapData();
+	}
 }
 
 
@@ -961,7 +991,7 @@ void TetrisDraw(void)
 
 
 	// 予測落下地点表示
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 122);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
 
 	if (blockType[typeBlock].flag)
 	{
@@ -978,6 +1008,13 @@ void TetrisDraw(void)
 	}
 
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+
+	// ｺﾝﾎﾞ数表示
+	if (combo > 0)
+	{
+		DrawFormatString(150, 100, 0x00FFFF, "%dCom", combo, true);
+	}
 }
 
 
