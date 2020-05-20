@@ -10,6 +10,7 @@ struct ENEMY
 	int Attack;				// 敵の攻撃力（テトリミノの出現列数）
 	int Cnt;				// 敵毎の攻撃速度用カウント
 	int CntMax;				// 敵毎の攻撃カウント最大数
+	int Flag;
 };
 
 bool EnemySysInit(void);

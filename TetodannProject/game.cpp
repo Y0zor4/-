@@ -19,7 +19,8 @@ int life;			// “G‘Ì—ÍŠi”[—p•Ï”
 int damage;			// “G‚ªó‚¯‚éƒ_ƒ[ƒWŠi”[—p•Ï”
 int attack;			// “G‚ÌUŒ‚—ñ”
 
-
+int fmCnt;			// ŠK‘wˆÚ“®‚ÌƒJƒEƒ“ƒg
+int fmFlag;
 
 bool GameSysInit(void)
 {
@@ -47,6 +48,8 @@ void GameInit(void)
 	life = GetEnemyLife();
 	attack = 0;
 
+	fmCnt = 0;
+	fmFlag = false;
 	gameover_game = false;
 
 }
@@ -80,16 +83,34 @@ int GameScene(void)
 	line_game = TetrisLine();
 	combo_game = TetrisCombo();
 	damage += DamageCalc();
-
+	
 	// ƒ_ƒ[ƒW‚ÆŒ»İ‚ÌŠK‘w‚ğˆø‚«“n‚·
 	life = EnemyCtl(damage, floor);
 
-	attack = GetAttackLines(floor);
-
-	FloorMove();
+	if (life <= 0)fmFlag = true;
+	
+	if (!fmFlag)
+	{
+		attack = GetAttackLines(floor);
+	}
+	else if(fmFlag)
+	{
+		
+		if (fmCnt < FMCNT)
+		{
+			fmCnt++;
+			
+		}
+		if (fmCnt >= FMCNT)
+		{
+			fmFlag = false;
+			FloorMove();
+ 			fmCnt = 0;
+		}
+	}
 
 	GameDraw();
-
+	
 	return rtn;
 }
 
@@ -100,6 +121,7 @@ void GameDraw(void)
 	DrawFormatString(0, 0, 0xFFFFFF, "GameScene");
 	BackgroundDraw(floor);
 	DrawGraph(0, 0, backImage, true);
+
 	EnemyDraw(floor);
 	TetrisDraw();
 	DrawFormatString(1000, 200, 0xFFFFFF, "Damage:%d", DamageCalc());

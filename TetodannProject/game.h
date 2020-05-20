@@ -2,6 +2,7 @@
 
 
 #define DAMAGE 100			// ダメージ計算用定数
+#define FMCNT 200			// 階層移動カウント
 
 bool GameSysInit(void);
 void GameInit(void);
