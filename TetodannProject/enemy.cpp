@@ -7,6 +7,9 @@
 ENEMY enemy[ENEMY_MAX];
 //int enemyImage[];
 
+int fmFlag_enemy;
+
+
 // “G‚ÌƒVƒXƒeƒ€Œn‰Šú‰»
 bool EnemySysInit(void)
 {
@@ -25,14 +28,19 @@ void EnemyInit(void)
 		enemy[e].Attack = 1;
 		enemy[e].CntMax = 500;
 		enemy[e].Cnt = enemy[e].CntMax;
-		enemy[e].Flag = true;
+		
 	}
+	fmFlag_enemy = false;
 }
 
 // “G‚Ìs“®§Œä
-int EnemyCtl(int damage, int floor)
+int EnemyCtl(int damage, int floor, bool flag)
 {
-	
+	fmFlag_enemy = flag;
+	if (fmFlag_enemy)
+	{
+		return 0;
+	}
 	// “G‘Ì—ÍŒ¸­ˆ—
 	if (enemy[floor - 1].Life > 0)enemy[floor - 1].Life = enemy[floor - 1].Life - damage;
 
@@ -40,15 +48,19 @@ int EnemyCtl(int damage, int floor)
 	if (enemy[floor - 1].Life <= 0)
 	{
 		enemy[floor - 1].Life = 0;
-		enemy[floor - 1].Flag = false;
+		flag = false;
 	}
-
+	
 	return enemy[floor - 1].Life;
 }
 
 // “G‚Ì•`‰æ
 void EnemyDraw(int floor)
 {
+	if (fmFlag_enemy)
+	{
+		return;
+	}
 	// “G‚Ì‘Ì—ÍƒQ[ƒW (Œã‚É•ÏX—L)
 	DrawBox(750, 90, 1350, 130, 0x000000, true);
 	DrawBox(750, 90, 600 * enemy[floor - 1].Life / enemy[floor - 1].LifeMax + 750, 130, 0x00FF00, true);
@@ -80,21 +92,22 @@ int GetEnemyLife(void)
 
 int GetAttackLines(int floor)
 {
-	if (!enemy[floor - 1].Flag)
+	if (fmFlag_enemy)
+	{
+		return 0;
+	}
+
+	
+	
+	// “G‚ÌUŒ‚ŠÖ˜A
+	if (enemy[floor - 1].Cnt > 0)enemy[floor - 1].Cnt--;
+
+	if (enemy[floor - 1].Cnt <= 0)
 	{
 		enemy[floor - 1].Cnt = enemy[floor - 1].CntMax;
+		return enemy[floor - 1].Attack;
 	}
-	else
-	{
-		// “G‚ÌUŒ‚ŠÖ˜A
-		if (enemy[floor - 1].Cnt > 0)enemy[floor - 1].Cnt--;
-
-		if (enemy[floor - 1].Cnt <= 0)
-		{
-			enemy[floor - 1].Cnt = enemy[floor - 1].CntMax;
-			return enemy[floor - 1].Attack;
-		}
-	}
+	
 	return 0;
 }
 

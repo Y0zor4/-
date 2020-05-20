@@ -82,32 +82,21 @@ int GameScene(void)
 
 	line_game = TetrisLine();
 	combo_game = TetrisCombo();
-	damage += DamageCalc();
-	
+	if (!fmFlag)
+	{
+		damage += DamageCalc();
+	}
+
 	// ƒ_ƒ[ƒW‚ÆŒ»İ‚ÌŠK‘w‚ğˆø‚«“n‚·
-	life = EnemyCtl(damage, floor);
+	life = EnemyCtl(damage, floor, fmFlag);
 
 	if (life <= 0)fmFlag = true;
 	
-	if (!fmFlag)
-	{
-		attack = GetAttackLines(floor);
-	}
-	else if(fmFlag)
-	{
-		
-		if (fmCnt < FMCNT)
-		{
-			fmCnt++;
-			
-		}
-		if (fmCnt >= FMCNT)
-		{
-			fmFlag = false;
-			FloorMove();
- 			fmCnt = 0;
-		}
-	}
+	
+	attack = GetAttackLines(floor);
+	
+	FloorMove();
+	
 
 	GameDraw();
 	
@@ -146,5 +135,20 @@ int DamageCalc(void)
 // ŠK‘wˆÚ“®ˆ—
 void FloorMove(void)
 {
-	if (life <= 0)floor += 1;	
+	if (fmFlag)
+	{
+
+		if (fmCnt < FMCNT)
+		{
+			fmCnt++;
+
+		}
+		if (fmCnt >= FMCNT)
+		{
+			fmFlag = false;
+			if (life <= 0)floor += 1;
+			fmCnt = 0;
+		}
+	}
+
 }
