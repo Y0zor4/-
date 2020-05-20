@@ -52,6 +52,11 @@ int minoCnt;
 // 揋偺峌寕
 int atkMax;
 
+// 连凹迧U寕梡
+int charge;
+int chargeBring;
+bool chargeBringFlag;
+
 // 罐把蛋兽皸p
 bool gameoverFlag;
 
@@ -138,6 +143,9 @@ void TetrisInit(void)
 	dontCtlTime = 0;
 	minoCnt = 0;
 	atkMax = 0;
+	charge = 0;
+	chargeBring = 100;
+	chargeBringFlag = false;
 	putFlag = false; 
 	holdFlag = false;
 	gameoverFlag = false;
@@ -344,6 +352,7 @@ void MinoInit(void)
 int TetrisCtl(int atk)
 {
 	// 弶婜壔張棟
+	int damage = 0;
 	line = 0;			// 枅腾把偺撞輴敃蹜稐p
 	putFlag = false;    // 偦偺腾把偱偼傑偩抲偄偰偄側偄偨傔弶婜壔
 
@@ -367,7 +376,6 @@ int TetrisCtl(int atk)
 			MinoData();			// 棉袄曐懚
 			if (HitCheckMove())
 			{
-				blockType[typeBlock].flag = false;
 				gameoverFlag = true;
 			}
 		}
@@ -406,8 +414,16 @@ int TetrisCtl(int atk)
 	// 猩嶍彍
 	DisMino();
 
+	if (charge < 15) charge += line;
 
-
+	if (keyDownTrigger[KEY_ID_LSHIFT])
+	{
+		if (charge >= 10)
+		{
+			damage += charge * 200;
+			charge = 0;
+		}
+	}
 
 
 	// 猩愗傝懼偊
@@ -431,7 +447,7 @@ int TetrisCtl(int atk)
 		}
 	}
 
-	return 0;
+	return damage;
 }
 
 
@@ -1065,7 +1081,7 @@ void TetrisDraw(void)
 		DrawFormatString(150, 100, 0x00FFFF, "%dCom", combo, true);
 	}
 
-	// 峌寕楍悢悢昞帵
+	// 峌寕楍悢昞帵
 	if (atkMax > 0)
 	{
 		for (int i = 0; i < atkMax; i++)
@@ -1075,6 +1091,46 @@ void TetrisDraw(void)
 	}
 	DrawFormatString(20, 400, 0x00FFFF, "%d楍", atkMax, true);
 	
+
+	// 连凹迧U寕昞帵
+	for (int i = 0; i < charge; i++)
+	{
+		DrawGraph(16 + (i * MINO_SIZE_X), 838, minoImage[0], true);
+	}
+	if (charge < 10)	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
+	if (charge >= 10)	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 50);
+	for (int i = 0; i < charge; i++)
+	{
+		DrawBox(16 + (i * MINO_SIZE_X), 838,
+			16 + (i * MINO_SIZE_X) + MINO_SIZE_X, 838 + MINO_SIZE_Y, 0x000000, true);
+	}
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	if (charge >= 10)
+	{
+		if (chargeBringFlag)
+		{
+			chargeBring += 2;
+			if (chargeBring > 200)
+			{
+				chargeBringFlag = false;
+			}
+		}
+		else
+		{
+			chargeBring -= 2;
+			if (chargeBring < 100)
+			{
+				chargeBringFlag = true;
+			}
+		}
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, chargeBring);
+		for (int i = 0; i < charge; i++)
+		{
+			DrawBox(16 + (i * MINO_SIZE_X), 838, 
+				16 + (i * MINO_SIZE_X) + MINO_SIZE_X, 838 + MINO_SIZE_Y, 0xFFFFFF, true);
+		}
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	}
 }
 
 
