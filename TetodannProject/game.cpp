@@ -94,6 +94,8 @@ int GameScene(void)
 	
 	
 	attack = GetAttackLines(floor);
+
+	BackgroundCtl(floor, fmFlag);
 	
 	FloorMove();
 	
