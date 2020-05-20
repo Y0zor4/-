@@ -49,6 +49,12 @@ bool holdFlag;
 // ﾐﾉ自動落下用
 int minoCnt;
 
+// 敵の攻撃
+int atkMax;
+
+// ｹﾞｰﾑｵｰﾊﾞｰ用
+bool gameoverFlag;
+
 
 
 
@@ -131,8 +137,10 @@ void TetrisInit(void)
 	combo = 0;
 	dontCtlTime = 0;
 	minoCnt = 0;
+	atkMax = 0;
 	putFlag = false; 
 	holdFlag = false;
+	gameoverFlag = false;
 }
 
 
@@ -333,11 +341,13 @@ void MinoInit(void)
 
 
 
-void TetrisCtl(int atk)
+int TetrisCtl(int atk)
 {
 	// 初期化処理
 	line = 0;			// 毎ﾌﾚｰﾑのﾗｲﾝ数保存用
 	putFlag = false;    // そのﾌﾚｰﾑではまだ置いていないため初期化
+
+	atkMax += atk;
 
 	if (dontCtlTime <= 0)
 	{
@@ -350,9 +360,16 @@ void TetrisCtl(int atk)
 		lineCnt = 0;		// 消したﾗｲﾝ数の保存用
 
 		// ﾐﾉが出現しているかどうかのﾁｪｯｸ
-		if (!blockType[typeBlock].flag)
+		if (!blockType[typeBlock].flag && !gameoverFlag)
 		{
-			CreateMino();			// なければ出現処理
+			CreateMino();		// なければ出現処理
+
+			MinoData();			// ﾃﾞｰﾀ保存
+			if (HitCheckMove())
+			{
+				blockType[typeBlock].flag = false;
+				gameoverFlag = true;
+			}
 		}
 	}
 
@@ -381,9 +398,9 @@ void TetrisCtl(int atk)
 	MoveMino();
 
 	// 敵の攻撃
-	if (atk != 0)
+	if (atkMax != 0 && putFlag)
 	{
-		EnemyAtkBlock(atk);
+		EnemyAtkBlock();
 	}
 	
 	// ﾐﾉ削除
@@ -406,15 +423,15 @@ void TetrisCtl(int atk)
 		dontCtlTime--;
 	}
 
+	for (int y = 0; y < 6 - 1; y++)
+	{
+		for (int x = 1; x < DATA_MAX_X - 1; x++)
+		{
+			mapData[y][x] = -1;
+		}
+	}
 
-	// バグ防止
-	//for (int y = 1; y < 6; y++)
-	//{
-	//	for (int x = 1; x < DATA_MAX_X - 1; x++)
-	//	{
-	//		moveData[y][x] = -1;
-	//	}
-	//}
+	return 0;
 }
 
 
@@ -529,7 +546,7 @@ void MoveMino(void)
 	if (blockType[typeBlock].flag)
 	{
 		MinoSave();			// 移動前のﾐﾉ情報保存
-		AutoMoveMino();			// 自動落下
+		AutoMoveMino();		// 自動落下
 		MinoData();			// ﾃﾞｰﾀ保存
 		if (HitCheckMove())
 		{
@@ -588,7 +605,7 @@ void MoveMino(void)
 void AutoMoveMino(void)
 {
 	minoCnt++;
-	if (minoCnt % 30 == 0)
+	if (minoCnt % 70 == 0)
 	{
 		blockType[typeBlock].pos.y++;
 	}
@@ -792,9 +809,21 @@ void MinoSaveRev(void)
 
 
 // 敵の攻撃
-void EnemyAtkBlock(int atk)
+void EnemyAtkBlock(void)
 {
-	for (int y = 10; y < DATA_MAX_Y - 1; y++)
+	int atk = 0;
+	if (atkMax < 4)
+	{
+		atk = atkMax;
+		atkMax = 0;
+	}
+	else
+	{
+		atk = 4;
+		atkMax -= 4;
+	}
+
+	for (int y = 9; y < DATA_MAX_Y - 1; y++)
 	{
 		for (int x = 1; x < DATA_MAX_X - 1; x++)
 		{
@@ -829,15 +858,15 @@ void EnemyAtkBlock(int atk)
 	}
 
 	// ﾑｰﾌﾞﾃﾞｰﾀ補正
-	if (HitCheckMove())
-	{
-		while (HitCheckMove())
-		{
-			blockType[typeBlock].pos.y--;
-			MinoData();
-		}
-		MapData();
-	}
+	//if (HitCheckMove())
+	//{
+	//	while (HitCheckMove())
+	//	{
+	//		blockType[typeBlock].pos.y--;
+	//		MinoData();
+	//	}
+	//	MapData();
+	//}
 }
 
 
@@ -948,6 +977,26 @@ void TetrisDraw(void)
 		}
 	}
 
+	if (gameoverFlag)
+	{
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
+
+		for (int y = 10; y < DATA_MAX_Y - 1; y++)
+		{
+			for (int x = 1; x < DATA_MAX_X - 1; x++)
+			{
+				if (mapData[y][x] != -1)
+				{
+					DrawBox((x - 1) * MINO_SIZE_X + 152, (y - 10) * MINO_SIZE_Y + 16, 
+						(x - 1) * MINO_SIZE_X + 152 + MINO_SIZE_X, (y - 10) * MINO_SIZE_Y + 16 + MINO_SIZE_Y,
+						0x000000, true);
+				}
+			}
+		}
+
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	}
+
 
 	// next
 	for (int i = 0; i < BLOCK_TYPE_MAX; i++)
@@ -1015,6 +1064,17 @@ void TetrisDraw(void)
 	{
 		DrawFormatString(150, 100, 0x00FFFF, "%dCom", combo, true);
 	}
+
+	// 攻撃列数数表示
+	if (atkMax > 0)
+	{
+		for (int i = 0; i < atkMax; i++)
+		{
+			DrawGraph(56, 776 - (i * MINO_SIZE_Y), minoImage[7], true);
+		}
+	}
+	DrawFormatString(20, 400, 0x00FFFF, "%d列", atkMax, true);
+	
 }
 
 
@@ -1029,3 +1089,7 @@ int TetrisCombo(void)
 	return combo;
 }
 
+bool Gameover(void)
+{
+	return gameoverFlag;
+}

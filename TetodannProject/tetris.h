@@ -70,7 +70,7 @@ struct BLOCK
 bool TetrisSysInit(void);		// ﾃﾄﾘｽ関連ｼｽﾃﾑ系初期化
 void TetrisInit(void);			// ﾃﾄﾘｽ関連初期化
 void MinoInit(void);			// ﾐﾉ情報初期化
-void TetrisCtl(int atk);		// ﾃﾄﾘｽ全体処理
+int TetrisCtl(int atk);			// ﾃﾄﾘｽ全体処理
 void CreateMino(void);			// ﾐﾉ出現
 void MinoData(void);			// ﾐﾉ情報をmoveDataへ
 void MoveMino(void);			// ﾐﾉの制御
@@ -86,7 +86,7 @@ bool DisMino2(int y);			// ﾐﾉ消滅処理
 void MinoSave(void);			// ﾐﾉ情報のﾊﾞｯｸｱｯﾌﾟ
 void MinoSaveRev(void);			// ﾐﾉ情報をﾊﾞｯｸｱｯﾌﾟで上書き(移動取り消し)
 void TetrisDraw(void);			// 描画
-void EnemyAtkBlock(int atk);	// 敵の攻撃
+void EnemyAtkBlock(void);		// 敵の攻撃
 void MinoPreDown(void);			// ﾐﾉの予測落下地点
 bool HitCheckPreDown(void);		// 当たり判定最下落下用
 
@@ -96,3 +96,4 @@ void Hold(void);						  // hold用
 
 int TetrisLine(void);			// 消した列数を返り値とする関数
 int TetrisCombo(void);			// コンボ数を返り値とする関数
+bool Gameover(void);
