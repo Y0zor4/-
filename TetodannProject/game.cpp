@@ -11,11 +11,15 @@ int backImage;		// ¹Ş°Ñ‚Ì”wŒi—p(“G‚ª‚¢‚È‚¢‚Æ‚±‚ë)
 
 int line_game;		// —ñŒvZ—p•Ï”
 int combo_game;		// ƒRƒ“ƒ{ŒvZ—p•Ï”
+bool gameover_game;
+
 
 int floor;			// ŠK‘wˆÚ“®—p•Ï”
 int life;			// “G‘Ì—ÍŠi”[—p•Ï”
 int damage;			// “G‚ªó‚¯‚éƒ_ƒ[ƒWŠi”[—p•Ï”
 int attack;			// “G‚ÌUŒ‚—ñ”
+
+
 
 bool GameSysInit(void)
 {
@@ -43,6 +47,8 @@ void GameInit(void)
 	life = GetEnemyLife();
 	attack = 0;
 
+	gameover_game = false;
+
 }
 
 int GameScene(void)
@@ -67,11 +73,13 @@ int GameScene(void)
 	}
 
 	// ÃÄØ½Ctl‚É“n‚·ˆø”‚ÍA“G‚©‚çH‚ç‚¤‚»‚ÌÌÚ°Ñ‚ÌUŒ‚‚ÌÀŞÒ°¼Ş—ñ”
-	TetrisCtl(attack);
+	damage = TetrisCtl(attack);
+	gameover_game = Gameover();
+
 
 	line_game = TetrisLine();
 	combo_game = TetrisCombo();
-	damage = DamageCalc();
+	damage += DamageCalc();
 
 	// ƒ_ƒ[ƒW‚ÆŒ»İ‚ÌŠK‘w‚ğˆø‚«“n‚·
 	life = EnemyCtl(damage, floor);
