@@ -15,7 +15,7 @@ struct ENEMY
 
 bool EnemySysInit(void);
 void EnemyInit(void);
-int EnemyCtl(int damage, int floor);
+int EnemyCtl(int damage, int floor, bool flag);
 void EnemyDraw(int floor);
 int GetEnemyLife(void);
 int GetAttackLines(int floor);
