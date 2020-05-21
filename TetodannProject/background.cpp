@@ -14,7 +14,7 @@ bool moveBgFlag;
 bool BackgroundSysInit(void)
 {
 	bool rtnFlag = true;
-	bgImageTmp = LoadGraph("image/bg_tmp2.png");
+	bgImageTmp = LoadGraph("image/bg_tmp.png");
 	wallImageTmp = LoadGraph("image/wall_tmp.png");
 	return rtnFlag;
 }
@@ -119,5 +119,5 @@ void BackgroundDraw(int floor)
 	DrawLine(bgPosX + 432, bgPosY + 290, bgPosX, bgPosY, 0x000000);
 
 
-	// DrawGraph(bgPosX, bgPosY, bgImageTmp, true);
+	 DrawGraph(bgPosX - 432, bgPosY - 350, bgImageTmp, true);
 }
