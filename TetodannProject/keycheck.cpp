@@ -42,6 +42,7 @@ void KeyCheck(void)
 	keyNew[KEY_ID_X] = CheckHitKey(KEY_INPUT_X);
 	keyNew[KEY_ID_C] = CheckHitKey(KEY_INPUT_C);
 	keyNew[KEY_ID_LSHIFT] = CheckHitKey(KEY_INPUT_LSHIFT);
+	keyNew[KEY_ID_ENTER] = CheckHitKey(KEY_INPUT_RETURN);
 
 
 	//ƒÿ∂ﬁ∞ÇÃéZèo

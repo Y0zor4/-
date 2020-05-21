@@ -34,6 +34,7 @@ void GameclearDraw(void)
 	ClsDrawScreen();
 	SetFontSize(50);
 	DrawFormatString(0, 0, 0xFFFFFF, "GameclearScene");
-	DrawBox(100, 100, 700, 500, 0x00FF00, true);
+	DrawFormatString(650, 450, 0xFFFFFF, "GameClear!!");
+	DrawFormatString(575, 500, 0xFFFFFF, "Congratulations!!");
 	ScreenFlip();
 }

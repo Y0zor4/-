@@ -16,6 +16,7 @@ enum KEY_ID
 	KEY_ID_X,
 	KEY_ID_C,
 	KEY_ID_LSHIFT,
+	KEY_ID_ENTER,
 	KEY_ID_MAX
 };
 
