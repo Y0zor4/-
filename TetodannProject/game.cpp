@@ -20,7 +20,7 @@ int damage;			// “G‚ªó‚¯‚éƒ_ƒ[ƒWŠi”[—p•Ï”
 int attack;			// “G‚ÌUŒ‚—ñ”
 
 int fmCnt;			// ŠK‘wˆÚ“®‚ÌƒJƒEƒ“ƒg
-int fmFlag;
+bool fmFlag;
 
 bool GameSysInit(void)
 {

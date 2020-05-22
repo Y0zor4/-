@@ -2,6 +2,7 @@
 #include "main.h"
 #include "keycheck.h"
 #include "select.h"
+#include "fade.h"
 
 bool SelectSysInit(void)
 {
@@ -22,12 +23,15 @@ int SelectScene(void)
 	// rtn = 1:ゲームシーンへ　rtn = 2:タイトルシーンへ
 	if (keyDownTrigger[KEY_ID_SPACE])
 	{
+		fadeout = true;
+		
 		rtn = 1;
 	}
 	else if (keyDownTrigger[KEY_ID_ENTER])
 	{
 		rtn = 2;
 	}
+	
 
 	SelectDraw();
 
@@ -39,7 +43,7 @@ void SelectDraw(void)
 	ClsDrawScreen();
 	SetFontSize(25);
 	DrawFormatString(1400, 850, 0xFFFFFF, "Back To Title");
-	DrawFormatString(1400, 875, 0xFFFFFF, "Push To ENTER");
+	DrawFormatString(1400, 875, 0xFFFFFF, "Push to ENTER");
 	SetFontSize(50);
 	DrawFormatString(0, 0, 0xFFFFFF, "SelectScene");
 	DrawFormatString(650, 450, 0xFFFFFF, "GameStart");

@@ -37,5 +37,6 @@ void GameoverDraw(void)
 	DrawFormatString(450, 450, 0xFF0000, "GameOver");
 	SetFontSize(50);
 	DrawFormatString(0, 0, 0xFFFFFF, "GameoverScene");
+	DrawFormatString(550, 750, 0xFFFFFF, "Push To SPACE");
 	ScreenFlip();
 }

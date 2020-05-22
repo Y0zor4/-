@@ -125,6 +125,7 @@
   <ItemGroup>
     <ClCompile Include="background.cpp" />
     <ClCompile Include="enemy.cpp" />
+    <ClCompile Include="fade.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="gameclear.cpp" />
     <ClCompile Include="gameover.cpp" />
@@ -141,6 +142,7 @@
   <ItemGroup>
     <ClInclude Include="background.h" />
     <ClInclude Include="enemy.h" />
+    <ClInclude Include="fade.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="gameclear.h" />
     <ClInclude Include="gameover.h" />

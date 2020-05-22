@@ -9,7 +9,7 @@
 #include "gameover.h"
 #include "gameclear.h"
 #include "ranking.h"
-
+#include "fade.h"
 
 bool SysInit(void)
 {
@@ -34,6 +34,7 @@ bool SysInit(void)
 	if (!GameoverSysInit())  return false;
 	if (!GameclearSysInit()) return false;
 	if (!RankingSysInit())   return false;
-
+	if (!FadeInit())		 return false;
+	
 	return true;
 }
