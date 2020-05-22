@@ -10,95 +10,95 @@ struct BGPOS
 	float y[4];
 };
 
-int bgImageTmp;
 int wallImage;
-int bgPosY;
-int bgPosX;
+int groundImage;
+float bgPosY;
+float bgPosX;
 bool moveBgFlag;
 
 BGPOS ConstBgLPos[7];
 BGPOS ConstBgRPos[7];
+BGPOS ConstBgDPos[7];
+BGPOS ConstBgUPos[7];
 
 BGPOS bgLPos[6];
 BGPOS bgRPos[6];
+BGPOS bgDPos[6];
+BGPOS bgUPos[6];
 
 int scrollCnt;
 
 bool BackgroundSysInit(void)
 {
 	bool rtnFlag = true;
-	bgImageTmp = LoadGraph("image/bg_tmp.png");
 	wallImage = LoadGraph("image/wall.png");
+	groundImage = LoadGraph("image/ground.png");
 
-	ConstBgLPos[0].x[0] = (BG_POS_X - 496);
-	ConstBgLPos[0].y[0] = (BG_POS_Y - 273);
-	ConstBgLPos[0].x[1] = (BG_POS_X - 496);
-	ConstBgLPos[0].y[1] = (BG_POS_Y + 1071);
-	ConstBgLPos[0].x[2] = (BG_POS_X);
-	ConstBgLPos[0].y[2] = (BG_POS_Y + 60);
-	ConstBgLPos[0].x[3] = (BG_POS_X);
-	ConstBgLPos[0].y[3] = (BG_POS_Y + 690);
+	ConstBgLPos[0].x[0] = (BG_POS_X - 1242);
+	ConstBgLPos[0].y[0] = (BG_POS_Y - 782);
+	ConstBgLPos[0].x[1] = (BG_POS_X - 1242);
+	ConstBgLPos[0].y[1] = (BG_POS_Y + 1674);
+	ConstBgLPos[0].x[2] = (BG_POS_X - 88);
+	ConstBgLPos[0].y[2] = (BG_POS_Y);
+	ConstBgLPos[0].x[3] = (BG_POS_X - 88);
+	ConstBgLPos[0].y[3] = (BG_POS_Y + 760);
+
+	ConstBgLPos[1].x[0] = (BG_POS_X - 88);
+	ConstBgLPos[1].y[0] = (BG_POS_Y);
+	ConstBgLPos[1].x[1] = (BG_POS_X - 88);
+	ConstBgLPos[1].y[1] = (BG_POS_Y + 760);
+	ConstBgLPos[1].x[2] = (BG_POS_X + 125);
+	ConstBgLPos[1].y[2] = (BG_POS_Y + 144);
+	ConstBgLPos[1].x[3] = (BG_POS_X + 125);
+	ConstBgLPos[1].y[3] = (BG_POS_Y + 591);
+
+	ConstBgLPos[2].x[0] = (BG_POS_X + 125);
+	ConstBgLPos[2].y[0] = (BG_POS_Y + 144);
+	ConstBgLPos[2].x[1] = (BG_POS_X + 125);
+	ConstBgLPos[2].y[1] = (BG_POS_Y + 591);
+	ConstBgLPos[2].x[2] = (BG_POS_X + 216);
+	ConstBgLPos[2].y[2] = (BG_POS_Y + 204);
+	ConstBgLPos[2].x[3] = (BG_POS_X + 216);
+	ConstBgLPos[2].y[3] = (BG_POS_Y + 519);
+
+	ConstBgLPos[3].x[0] = (BG_POS_X + 216);
+	ConstBgLPos[3].y[0] = (BG_POS_Y + 204);
+	ConstBgLPos[3].x[1] = (BG_POS_X + 216);
+	ConstBgLPos[3].y[1] = (BG_POS_Y + 519);
+	ConstBgLPos[3].x[2] = (BG_POS_X + 264);
+	ConstBgLPos[3].y[2] = (BG_POS_Y + 237);
+	ConstBgLPos[3].x[3] = (BG_POS_X + 264);
+	ConstBgLPos[3].y[3] = (BG_POS_Y + 481);
+
+	ConstBgLPos[4].x[0] = (BG_POS_X + 264);
+	ConstBgLPos[4].y[0] = (BG_POS_Y + 237);
+	ConstBgLPos[4].x[1] = (BG_POS_X + 264);
+	ConstBgLPos[4].y[1] = (BG_POS_Y + 481);
+	ConstBgLPos[4].x[2] = (BG_POS_X + 296);
+	ConstBgLPos[4].y[2] = (BG_POS_Y + 260);
+	ConstBgLPos[4].x[3] = (BG_POS_X + 296);
+	ConstBgLPos[4].y[3] = (BG_POS_Y + 455);
+
+	ConstBgLPos[5].x[0] = (BG_POS_X + 296);
+	ConstBgLPos[5].y[0] = (BG_POS_Y + 260);
+	ConstBgLPos[5].x[1] = (BG_POS_X + 296);
+	ConstBgLPos[5].y[1] = (BG_POS_Y + 455);
+	ConstBgLPos[5].x[2] = (BG_POS_X + 318);
+	ConstBgLPos[5].y[2] = (BG_POS_Y + 274);
+	ConstBgLPos[5].x[3] = (BG_POS_X + 318);
+	ConstBgLPos[5].y[3] = (BG_POS_Y + 439);
+
+	ConstBgLPos[6].x[0] = (BG_POS_X + 318);
+	ConstBgLPos[6].y[0] = (BG_POS_Y + 274);
+	ConstBgLPos[6].x[1] = (BG_POS_X + 318);
+	ConstBgLPos[6].y[1] = (BG_POS_Y + 439);
+	ConstBgLPos[6].x[2] = (BG_POS_X + 335);
+	ConstBgLPos[6].y[2] = (BG_POS_Y + 285);
+	ConstBgLPos[6].x[3] = (BG_POS_X + 335);
+	ConstBgLPos[6].y[3] = (BG_POS_Y + 425);
 
 
-	ConstBgLPos[1].x[0] = (BG_POS_X);
-	ConstBgLPos[1].y[0] = (BG_POS_Y + 60);
-	ConstBgLPos[1].x[1] = (BG_POS_X);
-	ConstBgLPos[1].y[1] = (BG_POS_Y + 690);
-	ConstBgLPos[1].x[2] = (BG_POS_X + 150);
-	ConstBgLPos[1].y[2] = (BG_POS_Y + 161);
-	ConstBgLPos[1].x[3] = (BG_POS_X + 150);
-	ConstBgLPos[1].y[3] = (BG_POS_Y + 571);
-
-
-	ConstBgLPos[2].x[0] = (BG_POS_X + 150);
-	ConstBgLPos[2].y[0] = (BG_POS_Y + 161);
-	ConstBgLPos[2].x[1] = (BG_POS_X + 150);
-	ConstBgLPos[2].y[1] = (BG_POS_Y + 571);
-	ConstBgLPos[2].x[2] = (BG_POS_X + 227);
-	ConstBgLPos[2].y[2] = (BG_POS_Y + 212);
-	ConstBgLPos[2].x[3] = (BG_POS_X + 227);
-	ConstBgLPos[2].y[3] = (BG_POS_Y + 511);
-
-
-	ConstBgLPos[3].x[0] = (BG_POS_X + 227);
-	ConstBgLPos[3].y[0] = (BG_POS_Y + 212);
-	ConstBgLPos[3].x[1] = (BG_POS_X + 227);
-	ConstBgLPos[3].y[1] = (BG_POS_Y + 511);
-	ConstBgLPos[3].x[2] = (BG_POS_X + 271);
-	ConstBgLPos[3].y[2] = (BG_POS_Y + 242);
-	ConstBgLPos[3].x[3] = (BG_POS_X + 271);
-	ConstBgLPos[3].y[3] = (BG_POS_Y + 476);
-
-
-	ConstBgLPos[4].x[0] = (BG_POS_X + 271);
-	ConstBgLPos[4].y[0] = (BG_POS_Y + 242);
-	ConstBgLPos[4].x[1] = (BG_POS_X + 271);
-	ConstBgLPos[4].y[1] = (BG_POS_Y + 476);
-	ConstBgLPos[4].x[2] = (BG_POS_X + 294);
-	ConstBgLPos[4].y[2] = (BG_POS_Y + 257);
-	ConstBgLPos[4].x[3] = (BG_POS_X + 294);
-	ConstBgLPos[4].y[3] = (BG_POS_Y + 458);
-
-
-	ConstBgLPos[5].x[0] = (BG_POS_X + 294);
-	ConstBgLPos[5].y[0] = (BG_POS_Y + 257);
-	ConstBgLPos[5].x[1] = (BG_POS_X + 294);
-	ConstBgLPos[5].y[1] = (BG_POS_Y + 458);
-	ConstBgLPos[5].x[2] = (BG_POS_X + 309);
-	ConstBgLPos[5].y[2] = (BG_POS_Y + 267);
-	ConstBgLPos[5].x[3] = (BG_POS_X + 309);
-	ConstBgLPos[5].y[3] = (BG_POS_Y + 447);
-
-
-	ConstBgLPos[6].x[0] = (BG_POS_X + 309);
-	ConstBgLPos[6].y[0] = (BG_POS_Y + 267);
-	ConstBgLPos[6].x[1] = (BG_POS_X + 309);
-	ConstBgLPos[6].y[1] = (BG_POS_Y + 447);
-	ConstBgLPos[6].x[2] = (BG_POS_X + 320);
-	ConstBgLPos[6].y[2] = (BG_POS_Y + 275);
-	ConstBgLPos[6].x[3] = (BG_POS_X + 320);
-	ConstBgLPos[6].y[3] = (BG_POS_Y + 438);
-
+	// ‰E•Ç
 	for (int i = 0; i < 7; i++)
 	{
 		for (int j = 0; j < 4; j++)
@@ -108,6 +108,32 @@ bool BackgroundSysInit(void)
 		}
 	}
 
+
+	
+	for (int i = 0; i < 7; i++)
+	{
+		// “Vˆä
+		ConstBgUPos[i].x[0] = ConstBgLPos[i].x[0];
+		ConstBgUPos[i].y[0] = ConstBgLPos[i].y[0];
+		ConstBgUPos[i].x[1] = ConstBgLPos[i].x[2];
+		ConstBgUPos[i].y[1] = ConstBgLPos[i].y[2];
+		ConstBgUPos[i].x[2] = ConstBgRPos[i].x[0];
+		ConstBgUPos[i].y[2] = ConstBgRPos[i].y[0];
+		ConstBgUPos[i].x[3] = ConstBgRPos[i].x[2];
+		ConstBgUPos[i].y[3] = ConstBgRPos[i].y[2];
+
+		// °
+		ConstBgDPos[i].x[0] = ConstBgLPos[i].x[3];
+		ConstBgDPos[i].y[0] = ConstBgLPos[i].y[3];
+		ConstBgDPos[i].x[1] = ConstBgLPos[i].x[1];
+		ConstBgDPos[i].y[1] = ConstBgLPos[i].y[1];
+		ConstBgDPos[i].x[2] = ConstBgRPos[i].x[3];
+		ConstBgDPos[i].y[2] = ConstBgRPos[i].y[3];
+		ConstBgDPos[i].x[3] = ConstBgRPos[i].x[1];
+		ConstBgDPos[i].y[3] = ConstBgRPos[i].y[1];
+	}
+
+
 	return rtnFlag;
 }
 
@@ -115,13 +141,15 @@ bool BackgroundSysInit(void)
 
 void BackgroundInit(void)
 {
-	bgPosX = 0;
-	bgPosY = 0;
+	bgPosX = 5;
+	bgPosY = 5;
 	moveBgFlag = true;
 	for (int i = 0; i < 6; i++)
 	{
 		bgLPos[i] = ConstBgLPos[i + 1];
 		bgRPos[i] = ConstBgRPos[i + 1];
+		bgDPos[i] = ConstBgDPos[i + 1];
+		bgUPos[i] = ConstBgUPos[i + 1];
 	}
 
 	scrollCnt = 0;
@@ -140,9 +168,9 @@ void BackgroundCtl(int floor, bool flag)
 	// ‰æ–Ê—h‚ç‚µ
 	if (moveBgFlag)
 	{
-		if (bgPosY > -20)
+		if (bgPosY > -5)
 		{
-			bgPosY -= 1;
+			bgPosY -= 0.3;
 		}
 		else
 		{
@@ -151,9 +179,9 @@ void BackgroundCtl(int floor, bool flag)
 	}
 	else
 	{
-		if (bgPosY < 20)
+		if (bgPosY < 5)
 		{
-			bgPosY += 1;
+			bgPosY += 0.3;
 		}
 		else
 		{
@@ -168,6 +196,7 @@ void BackgroundCtl(int floor, bool flag)
 	{
 		for (int i = 0; i < 6; i++)
 		{
+			// ¶‰E
 			bgLPos[i].y[0] -= (ConstBgLPos[i + 1].y[0] - ConstBgLPos[i].y[0]) / SCROLL_MAX;
 			bgLPos[i].y[1] += (ConstBgLPos[i].y[1] - ConstBgLPos[i + 1].y[1]) / SCROLL_MAX;
 			bgLPos[i].y[2] -= (ConstBgLPos[i + 1].y[2] - ConstBgLPos[i].y[2]) / SCROLL_MAX;
@@ -179,7 +208,25 @@ void BackgroundCtl(int floor, bool flag)
 
 				bgLPos[i].x[j] -= (ConstBgLPos[i + 1].x[j] - ConstBgLPos[i].x[j]) / SCROLL_MAX;
 				bgRPos[i].x[j] -= (ConstBgRPos[i + 1].x[j] - ConstBgRPos[i].x[j]) / SCROLL_MAX;
-			}		
+			}	
+
+
+			// ã‰º
+			bgDPos[i].x[0] -= (ConstBgDPos[i + 1].x[0] - ConstBgDPos[i].x[0]) / SCROLL_MAX;
+			bgDPos[i].x[1] += (ConstBgDPos[i].x[1] - ConstBgDPos[i + 1].x[1]) / SCROLL_MAX;
+			bgDPos[i].x[2] -= (ConstBgDPos[i + 1].x[2] - ConstBgDPos[i].x[2]) / SCROLL_MAX;
+			bgDPos[i].x[3] += (ConstBgDPos[i].x[3] - ConstBgDPos[i + 1].x[3]) / SCROLL_MAX;
+
+			bgUPos[i].x[0] -= (ConstBgUPos[i + 1].x[0] - ConstBgUPos[i].x[0]) / SCROLL_MAX;
+			bgUPos[i].x[1] += (ConstBgUPos[i].x[1] - ConstBgUPos[i + 1].x[1]) / SCROLL_MAX;
+			bgUPos[i].x[2] -= (ConstBgUPos[i + 1].x[2] - ConstBgUPos[i].x[2]) / SCROLL_MAX;
+			bgUPos[i].x[3] += (ConstBgUPos[i].x[3] - ConstBgUPos[i + 1].x[3]) / SCROLL_MAX;
+
+			for (int j = 0; j < 4; j++)
+			{
+				bgDPos[i].y[j] -= (ConstBgDPos[i + 1].y[j] - ConstBgDPos[i].y[j]) / SCROLL_MAX;
+				bgUPos[i].y[j] -= (ConstBgUPos[i + 1].y[j] - ConstBgUPos[i].y[j]) / SCROLL_MAX;
+			}
 		}
 	}
 	else
@@ -188,6 +235,8 @@ void BackgroundCtl(int floor, bool flag)
 		{
 			bgLPos[i] = ConstBgLPos[i + 1];
 			bgRPos[i] = ConstBgRPos[i + 1];
+			bgDPos[i] = ConstBgDPos[i + 1];
+			bgUPos[i] = ConstBgUPos[i + 1];
 			scrollCnt = 0;
 		}
 	}
@@ -202,7 +251,7 @@ void BackgroundDraw(int floor)
 
 
 
-	for (int i = 0; i < 7; i++)
+	for (int i = 0; i < 6; i++)
 	{
 		DrawModiGraph(bgLPos[i].x[0] + bgPosX,
 			bgLPos[i].y[0] + bgPosY,
@@ -223,6 +272,26 @@ void BackgroundDraw(int floor)
 			bgRPos[i].x[1] + bgPosX,
 			bgRPos[i].y[1] + bgPosY,
 			wallImage, true);
+
+		DrawModiGraph(bgDPos[i].x[0] + bgPosX,
+			bgDPos[i].y[0] + bgPosY,
+			bgDPos[i].x[2] + bgPosX,
+			bgDPos[i].y[2] + bgPosY,
+			bgDPos[i].x[3] + bgPosX,
+			bgDPos[i].y[3] + bgPosY,
+			bgDPos[i].x[1] + bgPosX,
+			bgDPos[i].y[1] + bgPosY,
+			groundImage, true);
+
+		DrawModiGraph(bgUPos[i].x[0] + bgPosX,
+			bgUPos[i].y[0] + bgPosY,
+			bgUPos[i].x[2] + bgPosX,
+			bgUPos[i].y[2] + bgPosY,
+			bgUPos[i].x[3] + bgPosX,
+			bgUPos[i].y[3] + bgPosY,
+			bgUPos[i].x[1] + bgPosX,
+			bgUPos[i].y[1] + bgPosY,
+			wallImage, true);
 	}
 
 	DrawBox(BG_CENTER_POS_X + bgPosX - 130, BG_CENTER_POS_Y + bgPosY - 87, BG_CENTER_POS_X + bgPosX + 130, BG_CENTER_POS_Y + bgPosY + 102, 0x000000, true);
@@ -239,7 +308,4 @@ void BackgroundDraw(int floor)
 	DrawLine(BG_CENTER_POS_X + bgPosX - 432, BG_CENTER_POS_Y + bgPosY + 340, BG_CENTER_POS_X + bgPosX, BG_CENTER_POS_Y + bgPosY, 0x000000);
 	DrawLine(BG_CENTER_POS_X + bgPosX + 432, BG_CENTER_POS_Y + bgPosY - 290, BG_CENTER_POS_X + bgPosX, BG_CENTER_POS_Y + bgPosY, 0x000000);
 	DrawLine(BG_CENTER_POS_X + bgPosX + 432, BG_CENTER_POS_Y + bgPosY + 340, BG_CENTER_POS_X + bgPosX, BG_CENTER_POS_Y + bgPosY, 0x000000);
-
-
-	DrawGraph(bgPosX - 432, bgPosY - 350, bgImageTmp, true);
 }

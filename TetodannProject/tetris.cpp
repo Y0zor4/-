@@ -498,6 +498,7 @@ void CreateMino(void)
 	blockType[typeBlock].pos.y = 9;
 	dir = DIR_0;
 	blockType[typeBlock].flag = true;
+	minoCnt = 0;
 
 	for (int i = 0; i < BLOCK_TYPE_MAX - 1; i++)
 	{
