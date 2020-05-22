@@ -19,7 +19,7 @@ int TitleScene(void)
 {
 	int rtn = 0;
 
-	if (keyDownTrigger[KEY_ID_1])
+	if (keyDownTrigger[KEY_ID_SPACE])
 	{
 		rtn = 1;
 	}

@@ -23,5 +23,8 @@ enum SCENE_ID {
 };
 
 
+extern char name[];
+
+
 
 

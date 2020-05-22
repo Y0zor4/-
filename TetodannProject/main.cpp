@@ -1,4 +1,5 @@
 #include "Dxlib.h"	
+#include <string.h>
 #include "main.h"
 #include "init.h"
 #include "keycheck.h"
@@ -15,6 +16,8 @@
 // ¼½ÃÑŠÖ˜A
 SCENE_ID scnID;					// Œ»İ‚Ì¼°İŠi”[—p
 int nextscn;					// Ÿ‚Ì¼°İˆÚ“®æŒˆ’è—p
+int floor_main;
+char name[256];
 
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)

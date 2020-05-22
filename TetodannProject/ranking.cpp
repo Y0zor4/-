@@ -12,6 +12,7 @@ bool RankingSysInit(void)
 
 void RankingInit(void)
 {
+	// ñºëOÇ∆Ã€±Ç≈◊›∑›∏ﬁçÏê¨
 
 }
 
@@ -39,5 +40,6 @@ void RankingDraw(void)
 	SetFontSize(50);
 	DrawFormatString(0, 0, 0xFFFFFF, "RankingScene");
 	DrawBox(100, 100, 700, 500, 0x00FF00, true);
+	DrawFormatString(500, 500, 0xFFFFFF, "%s", name);
 	ScreenFlip();
 }
