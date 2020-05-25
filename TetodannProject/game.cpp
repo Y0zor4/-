@@ -98,7 +98,7 @@ int GameScene(void)
 	BackgroundCtl(floor, fmFlag);
 	
 	FloorMove();
-	
+	floor_main = floor;
 
 	GameDraw();
 	

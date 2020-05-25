@@ -13,6 +13,7 @@ bool RankingSysInit(void)
 void RankingInit(void)
 {
 	// –¼‘O‚ÆÌÛ±‚Å×İ·İ¸Şì¬
+	floor_main = 0;
 
 }
 

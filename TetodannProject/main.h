@@ -24,6 +24,7 @@ enum SCENE_ID {
 
 
 extern char name[];
+extern int floor_main;
 
 
 
