@@ -20,7 +20,8 @@ int damage;			// “G‚ªó‚¯‚éƒ_ƒ[ƒWŠi”[—p•Ï”
 int attack;			// “G‚ÌUŒ‚—ñ”
 
 int fmCnt;			// ŠK‘wˆÚ“®‚ÌƒJƒEƒ“ƒg
-bool fmFlag;
+bool fmFlag;		// ŠK‘wˆÚ“®’†‚©‚Ì”»’f—p
+int fmStCnt;        // “G‚ªÁ–Å‚µ‚Ä‚©‚çŠK‘wˆÚ“®‚ªn‚Ü‚é‚Ü‚Å‚Ì¶³İÄ
 
 bool GameSysInit(void)
 {
@@ -51,7 +52,7 @@ void GameInit(void)
 	fmCnt = 0;
 	fmFlag = false;
 	gameover_game = false;
-
+	fmStCnt = 0;
 }
 
 int GameScene(void)
@@ -89,13 +90,22 @@ int GameScene(void)
 
 	// ƒ_ƒ[ƒW‚ÆŒ»İ‚ÌŠK‘w‚ğˆø‚«“n‚·
 	life = EnemyCtl(damage, floor, fmFlag);
-
-	if (life <= 0)fmFlag = true;
-	
 	
 	attack = GetAttackLines(floor);
 
-	BackgroundCtl(floor, fmFlag);
+
+	// ŠK‘wŠÖ˜Aˆ—
+	if (life <= 0 && !fmFlag)
+	{
+		fmStCnt++;
+		if (fmStCnt > FM_ST_CNT)
+		{
+			fmFlag = true;
+			fmStCnt = 0;
+		}
+	}
+
+	BackgroundCtl(floor, fmFlag, life);
 	
 	FloorMove();
 	floor_main = floor;
@@ -110,7 +120,7 @@ void GameDraw(void)
 	ClsDrawScreen();
 	SetFontSize(50);
 	DrawFormatString(0, 0, 0xFFFFFF, "GameScene");
-	BackgroundDraw(floor);
+	BackgroundDraw(floor, GetEnemyBlend(floor));
 	DrawGraph(0, 0, backImage, true);
 
 	EnemyDraw(floor);

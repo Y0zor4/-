@@ -137,3 +137,14 @@ int GetAttackLines(int floor)
 
 
 
+// Œ»İ‚Ì“G‚Ì•\¦ó‘Ô‚ğ•Ô‚·B
+bool GetEnemyBlend(int floor)
+{
+	if (enemy[floor - 1].Appear == 0)
+	{
+ 		return false;
+	}
+	return true;
+}
+
+

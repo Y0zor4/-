@@ -164,10 +164,10 @@ void BackgroundInit(void)
 
 
 
-void BackgroundCtl(int floor, bool flag)
+void BackgroundCtl(int floor, bool flag, int life)
 {
 
-	if (floor == 2 && !flag)
+	if (floor == 2 && !flag && life > 0)
 	{
 		if (!bgImFlag)
 		{
@@ -265,7 +265,7 @@ void BackgroundCtl(int floor, bool flag)
 
 
 
-void BackgroundDraw(int floor)
+void BackgroundDraw(int floor, bool eneFlag)
 {
 
 	DrawBox(0, 0, 1600, 900, 0x512700, true);
@@ -343,11 +343,15 @@ void BackgroundDraw(int floor)
 	}
 	else if(bgFadeCnt != 0)
 	{
-		bgFadeCnt -= 10;
+		bgFadeCnt -= 5;
 		if (bgFadeCnt < 0)
 		{
 			bgFadeCnt = 0;
 		}
+	}
+	if (!eneFlag)
+	{
+		int a = 0;
 	}
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, bgFadeCnt);
 	DrawGraph(BG_POS_X, BG_POS_Y, bgImage, true);

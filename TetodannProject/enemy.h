@@ -21,3 +21,6 @@ int EnemyCtl(int damage, int floor, bool flag);
 void EnemyDraw(int floor);
 int GetEnemyLife(void);
 int GetAttackLines(int floor);
+
+// Œ»İ‚Ì“G‚Ì•\¦ó‘Ô‚ğ•Ô‚·(’Ã“c‚ªŸè‚Éì‚è‚Ü‚µ‚½)B
+bool GetEnemyBlend(int floor);
