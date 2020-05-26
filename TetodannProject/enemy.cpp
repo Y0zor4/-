@@ -5,7 +5,7 @@
 
 // ïœêî
 ENEMY enemy[ENEMY_MAX];
-//int enemyImage[];
+int enemyImage;
 
 int fmFlag_enemy;
 
@@ -30,6 +30,7 @@ void EnemyInit(void)
 		enemy[e].Cnt = enemy[e].CntMax;
 		enemy[e].Appear = 0;
 	}
+	enemyImage = LoadGraph("image/enemy1.png");
 	fmFlag_enemy = false;
 }
 
@@ -75,7 +76,7 @@ void EnemyDraw(int floor)
 		}
 	}
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, enemy[floor - 1].Appear);
-	DrawBox(1000, 500, 1200, 800, 0xFFFFFF, true);
+	DrawGraph(712, 176, enemyImage, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 
