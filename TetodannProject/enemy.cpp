@@ -30,7 +30,7 @@ void EnemyInit(void)
 		enemy[e].Cnt = enemy[e].CntMax;
 		enemy[e].Appear = 0;
 	}
-	enemyImage = LoadGraph("image/enemy1.png");
+	enemyImage = LoadGraph("image/doraki-.png");
 	fmFlag_enemy = false;
 }
 
