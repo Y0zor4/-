@@ -28,11 +28,16 @@ BGPOS bgUPos[6];
 
 int scrollCnt;
 
+int bgImage;
+bool bgImFlag;
+int bgFadeCnt;
+
 bool BackgroundSysInit(void)
 {
 	bool rtnFlag = true;
 	wallImage = LoadGraph("image/wall.png");
 	groundImage = LoadGraph("image/ground.png");
+	bgImage = LoadGraph("image/bg_tmp3.png");
 
 	ConstBgLPos[0].x[0] = (BG_POS_X - 1242);
 	ConstBgLPos[0].y[0] = (BG_POS_Y - 782);
@@ -133,6 +138,8 @@ bool BackgroundSysInit(void)
 		ConstBgDPos[i].y[3] = ConstBgRPos[i].y[1];
 	}
 
+	bgImFlag = false;
+	bgFadeCnt = 0;
 
 	return rtnFlag;
 }
@@ -159,6 +166,20 @@ void BackgroundInit(void)
 
 void BackgroundCtl(int floor, bool flag)
 {
+
+	if (floor == 2 && !flag)
+	{
+		if (!bgImFlag)
+		{
+			bgImFlag = true;
+			bgFadeCnt = 0;
+		}
+	}
+	else
+	{
+		bgImFlag = false;
+	}
+
 	if (!flag)
 	{
 		bgPosY = 0;
@@ -294,6 +315,7 @@ void BackgroundDraw(int floor)
 			wallImage, true);
 	}
 
+	// ‰e
 	DrawBox(BG_CENTER_POS_X + bgPosX - 130, BG_CENTER_POS_Y + bgPosY - 87, BG_CENTER_POS_X + bgPosX + 130, BG_CENTER_POS_Y + bgPosY + 102, 0x000000, true);
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 70);
@@ -308,4 +330,26 @@ void BackgroundDraw(int floor)
 	DrawLine(BG_CENTER_POS_X + bgPosX - 432, BG_CENTER_POS_Y + bgPosY + 340, BG_CENTER_POS_X + bgPosX, BG_CENTER_POS_Y + bgPosY, 0x000000);
 	DrawLine(BG_CENTER_POS_X + bgPosX + 432, BG_CENTER_POS_Y + bgPosY - 290, BG_CENTER_POS_X + bgPosX, BG_CENTER_POS_Y + bgPosY, 0x000000);
 	DrawLine(BG_CENTER_POS_X + bgPosX + 432, BG_CENTER_POS_Y + bgPosY + 340, BG_CENTER_POS_X + bgPosX, BG_CENTER_POS_Y + bgPosY, 0x000000);
+
+
+	// “Á•ÊŠK‘w
+	if (bgImFlag)
+	{
+		bgFadeCnt += 2;
+		if (bgFadeCnt > 255)
+		{
+			bgFadeCnt = 255;
+		}
+	}
+	else if(bgFadeCnt != 0)
+	{
+		bgFadeCnt -= 10;
+		if (bgFadeCnt < 0)
+		{
+			bgFadeCnt = 0;
+		}
+	}
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, bgFadeCnt);
+	DrawGraph(BG_POS_X, BG_POS_Y, bgImage, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
