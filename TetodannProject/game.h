@@ -3,7 +3,7 @@
 
 #define DAMAGE 100			// ダメージ計算用定数
 #define FMCNT 200			// 階層移動カウント
-#define FM_ST_CNT 0		// 階層移動が始まるまでの秒数
+#define FM_ST_CNT 80		// 階層移動が始まるまでの秒数
 
 bool GameSysInit(void);
 void GameInit(void);

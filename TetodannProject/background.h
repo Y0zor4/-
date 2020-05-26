@@ -15,5 +15,6 @@
 
 bool BackgroundSysInit(void);
 void BackgroundInit(void);
-void BackgroundCtl(int floor, bool flag, int life);
+void BackgroundCtl(int floor, bool flag, bool eneFlag);
 void BackgroundDraw(int floor, bool eneFlag);
+bool GetBgBlend(int floor);

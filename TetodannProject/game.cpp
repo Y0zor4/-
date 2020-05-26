@@ -21,7 +21,6 @@ int attack;			// “G‚ÌUŒ‚—ñ”
 
 int fmCnt;			// ŠK‘wˆÚ“®‚ÌƒJƒEƒ“ƒg
 bool fmFlag;		// ŠK‘wˆÚ“®’†‚©‚Ì”»’f—p
-int fmStCnt;        // “G‚ªÁ–Å‚µ‚Ä‚©‚çŠK‘wˆÚ“®‚ªn‚Ü‚é‚Ü‚Å‚Ì¶³İÄ
 
 bool GameSysInit(void)
 {
@@ -52,7 +51,6 @@ void GameInit(void)
 	fmCnt = 0;
 	fmFlag = false;
 	gameover_game = false;
-	fmStCnt = 0;
 }
 
 int GameScene(void)
@@ -97,15 +95,13 @@ int GameScene(void)
 	// ŠK‘wŠÖ˜Aˆ—
 	if (life <= 0 && !fmFlag)
 	{
-		fmStCnt++;
-		if (fmStCnt > FM_ST_CNT)
+		if (!GetEnemyBlend(floor) && !GetBgBlend(floor))
 		{
 			fmFlag = true;
-			fmStCnt = 0;
 		}
 	}
 
-	BackgroundCtl(floor, fmFlag, life);
+	BackgroundCtl(floor, fmFlag, GetEnemyBlend(floor));
 	
 	FloorMove();
 	floor_main = floor;
@@ -149,11 +145,9 @@ void FloorMove(void)
 {
 	if (fmFlag)
 	{
-
 		if (fmCnt < FMCNT)
 		{
 			fmCnt++;
-
 		}
 		if (fmCnt >= FMCNT)
 		{
