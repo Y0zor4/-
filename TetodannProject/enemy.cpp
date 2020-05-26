@@ -57,6 +57,28 @@ int EnemyCtl(int damage, int floor, bool flag)
 // “G‚Ì•`‰æ
 void EnemyDraw(int floor)
 {
+
+	if (enemy[floor - 1].Life > 0)
+	{
+		enemy[floor - 1].Appear += 10;
+		if (enemy[floor - 1].Appear >= 255)
+		{
+			enemy[floor - 1].Appear = 255;
+		}
+	}
+	else
+	{
+		enemy[floor - 1].Appear -= 2;
+		if (enemy[floor - 1].Appear <= 0)
+		{
+			enemy[floor - 1].Appear = 0;
+		}
+	}
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, enemy[floor - 1].Appear);
+	DrawBox(1000, 500, 1200, 800, 0xFFFFFF, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+
 	if (fmFlag_enemy)
 	{
 		return;
@@ -77,34 +99,8 @@ void EnemyDraw(int floor)
 	// “G‚Ì‘Ì—Í”’l
 	DrawFormatString(900, 30, 0xFFFFFF, "HP:%d/%d", enemy[floor - 1].Life, enemy[floor - 1].LifeMax);
 
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, enemy[floor - 1].Appear);
 
-	if (enemy[floor - 1].Life > 0)
-	{
 
-		enemy[floor - 1].Appear += 10;
-		if (enemy[floor - 1].Appear >= 255)
-		{
-			enemy[floor - 1].Appear = 255;
-		}
-
-		// “G‚Ì‘ã‚í‚è(Œã‚É‰æ‘œ‚Æ·‚µ‘Ö‚¦)
-		DrawBox(1000, 500, 1200, 800, 0xFFFFFF, true);
-	}
-	else
-	{
-
-		enemy[floor - 1].Appear -= 2;
-		if (enemy[floor - 1].Appear <= 0)
-		{
-			enemy[floor - 1].Appear = 0;
-		}
-
-		DrawBox(1000, 500, 1200, 800, 0xFFFFFF, true);
-
-	}
-
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 }
 
