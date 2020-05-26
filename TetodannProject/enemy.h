@@ -1,6 +1,7 @@
 //#pragma once
 
 #define ENEMY_MAX 50
+#define ENEMY_POSY_F 500
 
 
 struct ENEMY
@@ -11,6 +12,7 @@ struct ENEMY
 	int Cnt;				// 敵毎の攻撃速度用カウント
 	int CntMax;				// 敵毎の攻撃カウント最大数
 	int Flag;
+	int Appear;
 };
 
 bool EnemySysInit(void);
