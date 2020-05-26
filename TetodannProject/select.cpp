@@ -23,8 +23,6 @@ int SelectScene(void)
 	// rtn = 1:ゲームシーンへ　rtn = 2:タイトルシーンへ
 	if (keyDownTrigger[KEY_ID_SPACE])
 	{
-		fadeout = true;
-		
 		rtn = 1;
 	}
 	else if (keyDownTrigger[KEY_ID_ENTER])
