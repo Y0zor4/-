@@ -88,7 +88,6 @@ int GameScene(void)
 
 	// ƒ_ƒ[ƒW‚ÆŒ»İ‚ÌŠK‘w‚ğˆø‚«“n‚·
 	life = EnemyCtl(damage, floor, fmFlag);
-	
 	attack = GetAttackLines(floor);
 
 
