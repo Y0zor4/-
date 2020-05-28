@@ -3,9 +3,14 @@
 #include "keycheck.h"
 #include "title.h"
 
+int titleLogo;
+
+
 bool TitleSysInit(void)
 {
 	bool rtnFlag = true;
+
+	titleLogo = LoadGraph("image/title_logo.png");
 
 	return rtnFlag;
 }
@@ -32,8 +37,6 @@ int TitleScene(void)
 void TitleDraw(void)
 {
 	ClsDrawScreen();
-	SetFontSize(50);
-	DrawFormatString(0, 0, 0xFFFFFF, "TitleScene");
-	DrawBox(100, 100, 700, 500, 0x00FF00, true);
+	DrawGraph(0, 0, titleLogo, true);
 	ScreenFlip();
 }

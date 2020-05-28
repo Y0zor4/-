@@ -12,6 +12,7 @@ struct BGPOS
 
 int wallImage;
 int groundImage;
+int shadowImage;
 float bgPosY;
 float bgPosX;
 bool moveBgFlag;
@@ -37,6 +38,7 @@ bool BackgroundSysInit(void)
 	bool rtnFlag = true;
 	wallImage = LoadGraph("image/wall.png");
 	groundImage = LoadGraph("image/ground.png");
+	shadowImage = LoadGraph("image/bg_shadow.png");
 	bgImage = LoadGraph("image/bg_tmp3.png");
 
 	ConstBgLPos[0].x[0] = (BG_POS_X - 1242);
@@ -315,16 +317,21 @@ void BackgroundDraw(int floor, bool eneFlag)
 			wallImage, true);
 	}
 
-	// âe
-	DrawBox(BG_CENTER_POS_X + bgPosX - 130, BG_CENTER_POS_Y + bgPosY - 87, BG_CENTER_POS_X + bgPosX + 130, BG_CENTER_POS_Y + bgPosY + 102, 0x000000, true);
 
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 70);
-	// éläp
-	DrawBox(BG_CENTER_POS_X + bgPosX - 150, BG_CENTER_POS_Y + bgPosY - 102, BG_CENTER_POS_X + bgPosX + 150, BG_CENTER_POS_Y + bgPosY + 117, 0x000000, true);
-	DrawBox(BG_CENTER_POS_X + bgPosX - 170, BG_CENTER_POS_Y + bgPosY - 117, BG_CENTER_POS_X + bgPosX + 170, BG_CENTER_POS_Y + bgPosY + 132, 0x000000, true);
-	DrawBox(BG_CENTER_POS_X + bgPosX - 190, BG_CENTER_POS_Y + bgPosY - 132, BG_CENTER_POS_X + bgPosX + 190, BG_CENTER_POS_Y + bgPosY + 147, 0x000000, true);
-	DrawBox(BG_CENTER_POS_X + bgPosX - 210, BG_CENTER_POS_Y + bgPosY - 147, BG_CENTER_POS_X + bgPosX + 210, BG_CENTER_POS_Y + bgPosY + 162, 0x000000, true);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	// âe
+	DrawGraph(BG_POS_X, BG_POS_Y, shadowImage, true);
+
+
+	
+	//DrawBox(BG_CENTER_POS_X + bgPosX - 130, BG_CENTER_POS_Y + bgPosY - 87, BG_CENTER_POS_X + bgPosX + 130, BG_CENTER_POS_Y + bgPosY + 102, 0x000000, true);
+
+	//SetDrawBlendMode(DX_BLENDMODE_ALPHA, 70);
+	
+	//DrawBox(BG_CENTER_POS_X + bgPosX - 150, BG_CENTER_POS_Y + bgPosY - 102, BG_CENTER_POS_X + bgPosX + 150, BG_CENTER_POS_Y + bgPosY + 117, 0x000000, true);
+	//DrawBox(BG_CENTER_POS_X + bgPosX - 170, BG_CENTER_POS_Y + bgPosY - 117, BG_CENTER_POS_X + bgPosX + 170, BG_CENTER_POS_Y + bgPosY + 132, 0x000000, true);
+	//DrawBox(BG_CENTER_POS_X + bgPosX - 190, BG_CENTER_POS_Y + bgPosY - 132, BG_CENTER_POS_X + bgPosX + 190, BG_CENTER_POS_Y + bgPosY + 147, 0x000000, true);
+	//DrawBox(BG_CENTER_POS_X + bgPosX - 210, BG_CENTER_POS_Y + bgPosY - 147, BG_CENTER_POS_X + bgPosX + 210, BG_CENTER_POS_Y + bgPosY + 162, 0x000000, true);
+	//SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	DrawLine(BG_CENTER_POS_X + bgPosX - 432, BG_CENTER_POS_Y + bgPosY - 290, BG_CENTER_POS_X + bgPosX, BG_CENTER_POS_Y + bgPosY, 0x000000);
 	DrawLine(BG_CENTER_POS_X + bgPosX - 432, BG_CENTER_POS_Y + bgPosY + 340, BG_CENTER_POS_X + bgPosX, BG_CENTER_POS_Y + bgPosY, 0x000000);
