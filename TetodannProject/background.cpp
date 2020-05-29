@@ -140,9 +140,6 @@ bool BackgroundSysInit(void)
 		ConstBgDPos[i].y[3] = ConstBgRPos[i].y[1];
 	}
 
-	bgImFlag = false;
-	bgFadeCnt = 0;
-
 	return rtnFlag;
 }
 
@@ -162,6 +159,8 @@ void BackgroundInit(void)
 	}
 
 	scrollCnt = 0;
+	bgImFlag = false;
+	bgFadeCnt = 0;
 }
 
 
