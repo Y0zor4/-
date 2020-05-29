@@ -5,7 +5,6 @@
 
 // •Ï”
 ENEMY enemy[ENEMY_MAX];
-int enemyImage;
 
 int fmFlag_enemy;
 
@@ -14,7 +13,18 @@ int fmFlag_enemy;
 bool EnemySysInit(void)
 {
 	bool rtnFlag = true;
+	enemy[0].image = LoadGraph("image/slime1.png");
+	enemy[1].image = LoadGraph("image/slime2.png");
+	enemy[2].image = LoadGraph("image/slime3.png");
+	enemy[3].image = LoadGraph("image/slime4.png");
+	enemy[4].image = LoadGraph("image/slime5.png");
 
+	// ‰¼ˆ—
+	for (int e = 5; e < ENEMY_MAX; e++)
+	{
+		int i = rand() % 5;
+		enemy[e].image = enemy[i].image;
+	}
 	return rtnFlag;
 }
 
@@ -30,7 +40,7 @@ void EnemyInit(void)
 		enemy[e].Cnt = enemy[e].CntMax;
 		enemy[e].Appear = 0;
 	}
-	enemyImage = LoadGraph("image/doraki-.png");
+
 	fmFlag_enemy = false;
 }
 
@@ -76,8 +86,8 @@ void EnemyDraw(int floor)
 		}
 	}
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, enemy[floor - 1].Appear);
-	//DrawGraph(712, 176, enemyImage, true);
-	DrawBox(1000, 500, 1200, 800, 0xFFFFFF, true);
+	DrawGraph(712, 176, enemy[floor - 1].image, true);
+	//DrawBox(1000, 500, 1200, 800, 0xFFFFFF, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 

@@ -13,6 +13,7 @@ struct ENEMY
 	int CntMax;				// “G–ˆ‚ÌUŒ‚ƒJƒEƒ“ƒgÅ‘å”
 	int Flag;
 	int Appear;
+	int image;
 };
 
 bool EnemySysInit(void);
