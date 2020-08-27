@@ -1,6 +1,6 @@
 // #pragma once
 
-#define LOGO_CNT_MAX 300
+#define LOGO_CNT_MAX 700
 
 bool TitleSysInit(void);
 void TitleInit(void);

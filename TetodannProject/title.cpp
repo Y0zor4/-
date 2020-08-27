@@ -44,13 +44,19 @@ int TitleScene(void)
 		}
 	}
 
-	if (logoCnt < LOGO_CNT_MAX)
+	
+	// fade‚Ì§Œä
+	logoCnt += 2;
+	if (logoCnt < LOGO_CNT_MAX + 255)
 	{
-		logoCnt++;
+		if (logoCnt >= LOGO_CNT_MAX)
+		{
+			bringCnt += 2;
+		}
 	}
 	else
 	{
-		bringCnt++;
+		bringCnt -= 2;
 	}
 
 	TitleDraw();
@@ -65,9 +71,13 @@ void TitleDraw(void)
 	if (logoCnt < LOGO_CNT_MAX + 255)
 	{
 		DrawGraph(0, 0, teamLogo, true);
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, bringCnt);
+		DrawBox(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, 0x000000, true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
 	else
 	{
+		DrawBox(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, 0xffffff, true);
 		DrawGraph(0, 0, titleLogo, true);
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, bringCnt);
 		DrawBox(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, 0x000000, true);
