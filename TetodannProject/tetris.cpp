@@ -874,7 +874,7 @@ void EnemyAtkBlock(void)
 		lines[j] -= atk;
 	}
 
-	// —∞Ãﬁ√ﬁ∞¿ï‚ê≥
+	// —∞Ãﬁ√ﬁ∞¿ï‚ê≥(ÉXÉsÉìån)
 	//if (HitCheckMove())
 	//{
 	//	while (HitCheckMove())
