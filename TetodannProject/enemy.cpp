@@ -8,6 +8,7 @@ ENEMY enemy[ENEMY_MAX];
 
 int fmFlag_enemy;
 
+SPARK Spark[MAX_SPARK];	// 火花データ
 
 // 敵のシステム系初期化
 bool EnemySysInit(void)
@@ -25,6 +26,11 @@ bool EnemySysInit(void)
 		int i = rand() % 5;
 		enemy[e].image = enemy[i].image;
 	}
+
+	// 火花の存在を初期化する
+	for (int i = 0; i < MAX_SPARK; i++)
+		Spark[i].Valid = 0;
+
 	return rtnFlag;
 }
 
@@ -52,9 +58,20 @@ int EnemyCtl(int damage, int floor, bool flag)
 	{
 		return 0;
 	}
-	// 敵体力減少処理
-	if (enemy[floor - 1].Life > 0)enemy[floor - 1].Life = enemy[floor - 1].Life - damage;
 
+	int i, j, R;
+	// 敵体力減少処理
+	if (enemy[floor - 1].Life > 0)
+	{
+		enemy[floor - 1].Life = enemy[floor - 1].Life - damage;
+		// 火花を出す数をセット
+		R = GetRand(60);
+		for (j = 0; j < R; j++)
+		{
+			// 火花を生成
+			CreateSpark(1000 + j, 500 + j);
+		}
+	}
 	
 	if (enemy[floor - 1].Life <= 0)
 	{
@@ -95,7 +112,15 @@ void EnemyDraw(int floor)
 	{
 		return;
 	}
+	// 火花を描画する
+	for (int j = 0; j < MAX_SPARK; j++)
+	{
+		// 火花データが有効な時のみ描画
+		if (Spark[j].Valid == 1)
+			DrawPixel(Spark[j].X / 100, Spark[j].Y / 100,
+				GetColor(Spark[j].Bright, Spark[j].Bright, Spark[j].Bright));
 
+	}
 
 	// 敵の体力ゲージ (後に変更有)
 	DrawBox(750, 90, 1350, 130, 0x000000, true);
@@ -157,3 +182,35 @@ bool GetEnemyBlend(int floor)
 }
 
 
+// 火花を出す処理
+void CreateSpark(int x, int y)
+{
+	int i;
+
+	// 使われていない火花データを探す
+	for (i = 0; i < MAX_SPARK; i++)
+	{
+		if (Spark[i].Valid == 0) break;
+	}
+
+	// もし使われていない火花データがあったら火花を出す
+	if (i != MAX_SPARK)
+	{
+		// 火花の位置を設定
+		Spark[i].X = x * 100;
+		Spark[i].Y = y * 100;
+
+		// 移動力を設定
+		Spark[i].Sx = GetRand(1000) - 500;
+		Spark[i].Sy = -GetRand(500);
+
+		// 火花の重さをセット
+		Spark[i].G = GetRand(10);
+
+		// 火花の明るさセット
+		Spark[i].Bright = 255;
+
+		// 火花データを使用中にセット
+		Spark[i].Valid = 1;
+	}
+}

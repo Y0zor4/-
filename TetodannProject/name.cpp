@@ -98,7 +98,10 @@ int NameScene(void)
 		{
 			if (nameCnt < 7)
 			{
-				nameCnt++;
+				if (nameNum[nameCnt] >= 0)
+				{
+					nameCnt++;
+				}
 			}
 		}
 		if (keyDownTrigger[KEY_ID_LEFT])
@@ -113,20 +116,38 @@ int NameScene(void)
 
 
 
+	// –¼‘O‚ÌŠm’è
 	if (keyDownTrigger[KEY_ID_SPACE] || keyDownTrigger[KEY_ID_ENTER])
 	{
-		if (nameCnt > 3)
+		if (nameCnt > 1)
 		{
-			if (nameCnt == 7 || nameNum[nameCnt] == -1)
-				strcpy_s(name, 256, "");
-			for (int i = 0; i < 8; i++)
+			if (nameCnt == 2)
 			{
-				if (nameNum[i] != -1)
+				if (nameNum[2] != -1)
 				{
-					strcat_s(name, 256, letter[nameNum[i]]);
+					strcpy_s(name, 256, "");
+					for (int i = 0; i < 8; i++)
+					{
+						if (nameNum[i] != -1)
+						{
+							strcat_s(name, 256, letter[nameNum[i]]);
+						}
+					}
+					nameFlag = true;
 				}
 			}
-			nameFlag = true;
+			else
+			{
+				strcpy_s(name, 256, "");
+				for (int i = 0; i < 8; i++)
+				{
+					if (nameNum[i] != -1)
+					{
+						strcat_s(name, 256, letter[nameNum[i]]);
+					}
+				}
+				nameFlag = true;
+			}	
 		}
 	}
 	
