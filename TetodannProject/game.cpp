@@ -22,6 +22,9 @@ int attack;			// 敵の攻撃列数
 int fmCnt;			// 階層移動時のカウント
 bool fmFlag;		// 階層移動中かの判断用
 
+int gameoverCnt;		// ゲームオーバー時のカウント
+
+
 bool GameSysInit(void)
 {
 	bool rtnFlag = true;
@@ -57,11 +60,15 @@ int GameScene(void)
 {
 	int rtn = 0;
 
-	if (keyDownTrigger[KEY_ID_1])
+	if (gameover_game)
 	{
-		rtn = 1;
+		gameoverCnt++;
+		if (gameoverCnt == 60)
+		{
+			rtn = 1;
+		}
 	}
-	else if (keyDownTrigger[KEY_ID_2])
+	if (keyDownTrigger[KEY_ID_2])
 	{
 		rtn = 2;
 	}
