@@ -43,7 +43,6 @@ void SelectDraw(void)
 	DrawFormatString(1400, 850, 0xFFFFFF, "Back To Title");
 	DrawFormatString(1400, 875, 0xFFFFFF, "Push to ENTER");
 	SetFontSize(50);
-	DrawFormatString(0, 0, 0xFFFFFF, "SelectScene");
 	DrawFormatString(650, 450, 0xFFFFFF, "GameStart");
 	DrawFormatString(600, 500, 0xFFFFFF, "Push to SPACE");
 	ScreenFlip();

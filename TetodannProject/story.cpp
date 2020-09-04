@@ -52,7 +52,6 @@ void StoryDraw(void)
 	SetDrawBright(255, 255, 255);
 
 	SetFontSize(50);
-	DrawFormatString(0, 0, 0xFFFFFF, "StoryScene");
 	DrawFormatString(450, 900 + scrollPosY, 0xFFFFFF, "とある建造物が存在する。");
 	DrawFormatString(300, 1000 + scrollPosY, 0xFFFFFF, "ダンジョンと呼称されるこの建造物は");
 	DrawFormatString(150, 1100 + scrollPosY, 0xFFFFFF, "いつどのような目的で建造されたのか誰も知らない。");

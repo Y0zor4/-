@@ -128,13 +128,9 @@ void GameDraw(void)
 
 	EnemyDraw(floor);
 	TetrisDraw();
-	DrawFormatString(1000, 200, 0xFFFFFF, "Damage:%d", DamageCalc());
+	
 	DrawFormatString(1400, 90, 0xFFFFFF, "F%d", floor);
-	// 消した列とコンボ確認用
-	DrawFormatString(900, 300, 0xFFFFFF, "line combo : %d, %d", line_game, combo_game);
-	// 敵からTetrisCtlに渡される列数確認用
-	DrawFormatString(900, 350, 0xFFFFFF, "atk : %d", attack);
-
+	
 	ScreenFlip();
 }
 
