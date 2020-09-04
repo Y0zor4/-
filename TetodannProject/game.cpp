@@ -66,6 +66,7 @@ int GameScene(void)
 		if (gameoverCnt == 60)
 		{
 			rtn = 1;
+			gameoverCnt = 0;
 		}
 	}
 	if (keyDownTrigger[KEY_ID_2])

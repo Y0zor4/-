@@ -15,7 +15,7 @@ bool SysInit(void)
 {
 	SetWindowText("tetorisudanzyonn");
 	SetGraphMode(SCREEN_SIZE_X, SCREEN_SIZE_Y, 16);
-	ChangeWindowMode(true);
+	ChangeWindowMode(false);
 
 	//DX×²ÌŞ×Ø‚Ì‰Šú‰»
 	if (DxLib_Init() == -1)
