@@ -1090,7 +1090,7 @@ void TetrisDraw(void)
 			DrawGraph(56, 776 - (i * MINO_SIZE_Y), minoImage[7], true);
 		}
 	}
-	DrawFormatString(20, 400, 0x00FFFF, "%dóÒ", atkMax, true);
+	//DrawFormatString(20, 400, 0x00FFFF, "%dóÒ", atkMax, true);
 	
 
 	// ¡¨∞ºﬁçUåÇï\é¶
