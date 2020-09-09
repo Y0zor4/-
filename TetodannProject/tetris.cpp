@@ -52,6 +52,13 @@ int minoCnt;
 // “G‚ÌUŒ‚
 int atkMax;
 
+// ‰æ–Ê—h‚ç‚µ—p
+int shakeCnt;
+int shakePosX;
+bool shakeFlag;
+bool shakeLR;
+
+
 // Á¬°¼ŞUŒ‚—p
 int charge;
 int chargeBring;
@@ -59,6 +66,12 @@ bool chargeBringFlag;
 
 // ¹Ş°Ñµ°ÊŞ°—p
 bool gameoverFlag;
+
+// Œø‰Ê‰¹
+int chargeSound;
+int blockSound;
+int deleteSound;
+int chargeAtkSound;
 
 
 
@@ -71,6 +84,14 @@ bool TetrisSysInit(void)
 	MinoInit();
 
 	LoadDivGraph("Image/mino.png", MINO_MAX, MINO_MAX, 1, MINO_SIZE_X, MINO_SIZE_Y, &minoImage[0]);
+
+	chargeSound = LoadSoundMem("sound/charge.mp3");
+
+	blockSound = LoadSoundMem("sound/block.mp3");
+
+	deleteSound = LoadSoundMem("sound/delete.mp3");
+
+	chargeAtkSound = LoadSoundMem("sound/chargeatk.mp3");
 
 	return rtnFlag;
 }
@@ -143,6 +164,10 @@ void TetrisInit(void)
 	dontCtlTime = 0;
 	minoCnt = 0;
 	atkMax = 0;
+	shakeCnt = 0;
+	shakePosX = 0;
+	shakeFlag = false;
+	shakeLR = true;
 	charge = 0;
 	chargeBring = 100;
 	chargeBringFlag = false;
@@ -409,12 +434,31 @@ int TetrisCtl(int atk)
 	if (atkMax != 0 && putFlag)
 	{
 		EnemyAtkBlock();
+		PlaySoundMem(blockSound, DX_PLAYTYPE_BACK, true);
+		shakeFlag = true;
+		shakeCnt = 0;
 	}
 	
 	// ĞÉíœ
 	DisMino();
 
-	if (charge < 15) charge += line;
+	// Á¬°¼Ş
+	if (line > 0)
+	{
+		if (charge < 15)
+		{
+			charge += line;
+			if (charge >= 15)
+			{
+				charge = 15;
+			}
+		}
+		if (charge >= 10)
+		{
+			// ‰¹Ä¶
+			PlaySoundMem(chargeSound, DX_PLAYTYPE_BACK, true);
+		}
+	}
 
 	if (keyDownTrigger[KEY_ID_LSHIFT])
 	{
@@ -422,6 +466,7 @@ int TetrisCtl(int atk)
 		{
 			damage += charge * 200;
 			charge = 0;
+			PlaySoundMem(chargeAtkSound, DX_PLAYTYPE_BACK, true);
 		}
 	}
 
@@ -486,6 +531,7 @@ void Hold(void)
 			blockType[typeBlock].flag = true;
 			holdFlag = true;
 		}
+		PlaySoundFile("sound/hold.mp3", DX_PLAYTYPE_BACK);
 	}
 }
 
@@ -556,6 +602,14 @@ void MoveMino(void)
 		{
 			MinoSaveRev();  // “–‚Ä‚Á‚Ä‚¢‚ê‚ÎÊŞ¯¸±¯Ìß‚Åã‘‚«
 		}
+		else
+		{
+			// ‰¹Ä¶
+			if (keyDownTrigger[KEY_ID_Z] || keyDownTrigger[KEY_ID_X])
+			{
+				PlaySoundFile("sound/move.mp3", DX_PLAYTYPE_BACK);
+			}
+		}
 		MinoData();		// “–‚½‚Á‚Ä‚¢‚È‚¯‚ê‚Î‚»‚Ì‚Ü‚Ü•Û‘¶
 	}
 
@@ -607,6 +661,14 @@ void MoveMino(void)
 		{
 			MinoSaveRev();  // “–‚Ä‚Á‚Ä‚¢‚ê‚ÎÊŞ¯¸±¯Ìß‚Åã‘‚«
 		}
+		else
+		{
+			// ‰¹Ä¶
+			if (keyDownTrigger[KEY_ID_RIGHT] || keyDownTrigger[KEY_ID_LEFT])
+			{
+				PlaySoundFile("sound/move.mp3", DX_PLAYTYPE_BACK);
+			}
+		}
 		MinoData();			// “–‚½‚Á‚Ä‚¢‚È‚¯‚ê‚Î‚»‚Ì‚Ü‚Ü•Û‘¶
 	}
 
@@ -615,6 +677,9 @@ void MoveMino(void)
 
 	// Å‰ºˆÚ“®ˆ—
 	KeyMoveMinoHardDown();
+
+	// ‰æ–Ê—h‚ç‚µ
+	ShakeBlock();
 }
 
 
@@ -672,6 +737,9 @@ void KeyMoveMinoHardDown(void)
 		blockType[typeBlock].flag = false;
 		putFlag = true;
 		holdFlag = false;
+		// ‰¹Ä¶
+		PlaySoundFile("sound/down.mp3", DX_PLAYTYPE_BACK);
+		
 	}
 }
 
@@ -750,6 +818,7 @@ void DisMino(void)
 			lines[lineCnt] = y;	// ‰½s–Ú‚©‚Ì•Û‘¶
 			lineCnt++;			// Á‚µ‚½×²İ”‚Ì‰ÁZ
 			dontCtlTime = DONT_CTL_TIME;
+			PlaySoundMem(deleteSound, DX_PLAYTYPE_BACK, true);
 		}
 	}
 
@@ -874,7 +943,7 @@ void EnemyAtkBlock(void)
 		lines[j] -= atk;
 	}
 
-	// Ñ°ÌŞÃŞ°À•â³(ƒXƒsƒ“Œn)
+	// Ñ°ÌŞÃŞ°À•â³(“ÁêƒXƒsƒ“Œn)
 	//if (HitCheckMove())
 	//{
 	//	while (HitCheckMove())
@@ -884,6 +953,7 @@ void EnemyAtkBlock(void)
 	//	}
 	//	MapData();
 	//}
+	// –l‚É‚Í“ï‚µ‚©‚Á‚½...by’Ã“cB
 }
 
 
@@ -963,6 +1033,45 @@ bool HitCheckPreDown(void)
 	return false;
 }
 
+// ‰æ–Ê—h‚ç‚µ
+void ShakeBlock(void)
+{
+	if (shakeFlag)
+	{
+		shakeCnt++;
+		if (shakeCnt < 60)
+		{
+			if (shakeLR)
+			{
+				if (shakePosX > -6)
+				{
+					shakePosX -= 2;
+				}
+				else
+				{
+					shakeLR = !shakeLR;
+				}
+			}
+			else
+			{
+				if (shakePosX < 6)
+				{
+					shakePosX += 2;
+				}
+				else
+				{
+					shakeLR = !shakeLR;
+				}
+			}
+		}
+		else
+		{
+			shakeFlag = false;
+			shakePosX = 0;
+		}
+	}
+}
+
 
 void TetrisDraw(void)
 {
@@ -989,7 +1098,7 @@ void TetrisDraw(void)
 		{
 			if (mapData[y][x] != -1)
 			{
-				DrawGraph((x - 1) * MINO_SIZE_X + 152, (y - 10) * MINO_SIZE_Y + 16, minoImage[mapData[y][x]], true);
+				DrawGraph((x - 1) * MINO_SIZE_X + 152 + shakePosX, (y - 10) * MINO_SIZE_Y + 16, minoImage[mapData[y][x]], true);
 			}
 		}
 	}
@@ -1079,7 +1188,9 @@ void TetrisDraw(void)
 	// ºİÎŞ”•\¦
 	if (combo > 0)
 	{
-		DrawFormatString(150, 100, 0x00FFFF, "%dCom", combo, true);
+		SetFontSize(70);
+		DrawFormatString(405, 105, 0x000000, "%dRen", combo, true);
+		DrawFormatString(400, 100, 0x00FFFF, "%dRen", combo, true);
 	}
 
 	// UŒ‚—ñ”•\¦
@@ -1090,7 +1201,6 @@ void TetrisDraw(void)
 			DrawGraph(56, 776 - (i * MINO_SIZE_Y), minoImage[7], true);
 		}
 	}
-	//DrawFormatString(20, 400, 0x00FFFF, "%d—ñ", atkMax, true);
 	
 
 	// Á¬°¼ŞUŒ‚•\¦

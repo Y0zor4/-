@@ -24,6 +24,15 @@ bool fmFlag;		// 階層移動中かの判断用
 
 int gameoverCnt;		// ゲームオーバー時のカウント
 
+// ﾀﾞﾒｰｼﾞ表示用
+int damageTmp;
+int damageCnt;
+int damageFade;
+bool damageFlag;
+
+// ｻｳﾝﾄﾞ関係
+int bgm;
+
 
 bool GameSysInit(void)
 {
@@ -34,6 +43,8 @@ bool GameSysInit(void)
 	if (!BackgroundSysInit())  rtnFlag = false;
 
 	backImage = LoadGraph("Image/back_tmp.png");
+
+	bgm = LoadSoundMem("sound/bgm.mp3");
 
 	return rtnFlag;
 }
@@ -54,6 +65,10 @@ void GameInit(void)
 	fmCnt = 0;
 	fmFlag = false;
 	gameover_game = false;
+
+	damageTmp = 0;
+	damageCnt = 0;
+	damageFlag = false;
 }
 
 int GameScene(void)
@@ -86,7 +101,6 @@ int GameScene(void)
 	damage = TetrisCtl(attack);
 	gameover_game = Gameover();
 
-
 	line_game = TetrisLine();
 	combo_game = TetrisCombo();
 	if (!fmFlag)
@@ -98,6 +112,13 @@ int GameScene(void)
 	life = EnemyCtl(damage, floor, fmFlag);
 	attack = GetAttackLines(floor);
 
+	// ﾀﾞﾒｰｼﾞ表示用
+	if (damage != 0)
+	{
+		damageTmp = damage;
+		damageFlag = true;
+		damageCnt = 0;
+	}
 
 	// 階層関連処理
 	if (life <= 0 && !fmFlag)
@@ -114,7 +135,14 @@ int GameScene(void)
 	floor_main = floor;
 
 	GameDraw();
+
+	// 音再生
+	//PlaySoundMem(bgm, DX_PLAYTYPE_LOOP, false);
 	
+	if (rtn != 0)
+	{
+		StopSoundMem(bgm);
+	}
 	return rtn;
 }
 
@@ -130,6 +158,22 @@ void GameDraw(void)
 	TetrisDraw();
 	
 	DrawFormatString(1400, 90, 0xFFFFFF, "F%d", floor);
+
+	// ﾀﾞﾒｰｼﾞ表示
+	if (damageFlag)
+	{
+		damageCnt++;
+		if (damageCnt < 150)
+		{
+			SetFontSize(55);
+			DrawFormatString(1103, 503, 0x000000, "%d", damageTmp, true);
+			DrawFormatString(1100, 500, 0xFFFFFF, "%d", damageTmp, true);
+		}
+		else
+		{
+			damageFlag = false;
+		}
+	}
 	
 	ScreenFlip();
 }

@@ -11,6 +11,7 @@
 
 
 
+
 // ÌŞÛ¯¸‚Ìí—Ş
 enum BLOCK_TYPE
 {
@@ -89,6 +90,7 @@ void TetrisDraw(void);			// •`‰æ
 void EnemyAtkBlock(void);		// “G‚ÌUŒ‚
 void MinoPreDown(void);			// ĞÉ‚Ì—\‘ª—‰º’n“_
 bool HitCheckPreDown(void);		// “–‚½‚è”»’èÅ‰º—‰º—p
+void ShakeBlock(void);			// ‰æ–Ê—h‚ç‚µ
 
 
 bool CreateNext(int* nextBlock, int num); // next—p
