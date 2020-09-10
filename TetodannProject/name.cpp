@@ -12,8 +12,12 @@ int nameCnt;
 int nameBackImage;
 int enterImage1;
 int enterImage2;
+int yesImage;
+int noImage;
 
 bool nameFlag;
+
+bool yesFlag;
 
 
 bool NameSysInit(void)
@@ -53,6 +57,10 @@ bool NameSysInit(void)
 
 	enterImage2 = LoadGraph("Image/enter2.png");
 
+	yesImage = LoadGraph("Image/yes.png");
+
+	noImage = LoadGraph("Image/no.png");
+
 	return rtnFlag;
 }
 
@@ -69,6 +77,8 @@ void NameInit(void)
 	nameCnt = 0;
 
 	nameFlag = false;
+
+	yesFlag = false;
 }
 
 
@@ -81,7 +91,14 @@ int NameScene(void)
 	{
 		if (nameFlag)
 		{
-			rtn = 1;
+			if (yesFlag)
+			{
+				rtn = 1;
+			}
+			else
+			{
+				NameInit();
+			}
 		}
 	}
 
@@ -118,6 +135,23 @@ int NameScene(void)
 			if (nameCnt > 0)
 			{
 				nameCnt--;
+			}
+		}
+	}
+	else
+	{
+		if (yesFlag)
+		{
+			if (keyDownTrigger[KEY_ID_RIGHT])
+			{
+				yesFlag = !yesFlag;
+			}
+		}
+		else
+		{
+			if (keyDownTrigger[KEY_ID_LEFT])
+			{
+				yesFlag = !yesFlag;
 			}
 		}
 	}
@@ -232,6 +266,17 @@ void NameDraw(void)
 		else if (nameNum[0] != -1 && nameNum[1] != -1 && nameNum[2] != -1)
 		{
 			DrawGraph(1300, 350, enterImage2, true);
+		}
+	}
+	else
+	{
+		if (yesFlag)
+		{
+			DrawGraph(SCREEN_SIZE_X / 2 - 550, 450, yesImage, true);
+		}
+		else
+		{
+			DrawGraph(SCREEN_SIZE_X / 2 - 550, 450, noImage, true);
 		}
 	}
 	

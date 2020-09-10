@@ -18,6 +18,11 @@ void SelectInit(void)
 
 int SelectScene(void)
 {
+
+	// 都合によりシーンの削除
+	return 1;
+
+
 	int rtn = 0;
 
 	// rtn = 1:ゲームシーンへ　rtn = 2:タイトルシーンへ

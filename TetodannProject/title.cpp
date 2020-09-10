@@ -36,7 +36,7 @@ int TitleScene(void)
 	{
 		if (logoCnt < LOGO_CNT_MAX)
 		{
-			logoCnt = LOGO_CNT_MAX;
+			logoCnt = LOGO_CNT_MAX + 255;
 		}
 		else
 		{

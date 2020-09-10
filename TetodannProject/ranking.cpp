@@ -58,12 +58,12 @@ int RankingScene(void)
 
 	if (keyDownTrigger[KEY_ID_SPACE])
 	{
-		rtn = 1;
-	}
-	else if (keyDownTrigger[KEY_ID_ENTER])
-	{
 		rtn = 2;
 	}
+	/*else if (keyDownTrigger[KEY_ID_ENTER])
+	{
+		rtn = 1;
+	}*/
 
 	// ½¸Û°Ù
 	if (keyNew[KEY_ID_UP] && rankingPosY < 0)

@@ -471,13 +471,6 @@ int TetrisCtl(int atk)
 	}
 
 
-	// ÐÉØ‚è‘Ö‚¦
-	if (CheckHitKey(KEY_INPUT_NUMPAD0))
-	{
-		blockType[typeBlock].flag = false;
-	}
-
-
 	// ˆÚ“®•s‰ÂŽžŠÔ‚ÌŒ¸ŽZ
 	if (dontCtlTime >= 0)
 	{
