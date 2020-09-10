@@ -8,6 +8,11 @@ char letter[26][8];
 int nameNum[8];
 int nameCnt;
 
+// ‰æ‘œŒn
+int nameBackImage;
+int enterImage1;
+int enterImage2;
+
 bool nameFlag;
 
 
@@ -42,7 +47,11 @@ bool NameSysInit(void)
 	strcpy_s(letter[24], 8, "Y");
 	strcpy_s(letter[25], 8, "Z");
 	
+	nameBackImage = LoadGraph("Image/name.png");
 
+	enterImage1 = LoadGraph("Image/enter1.png");
+
+	enterImage2 = LoadGraph("Image/enter2.png");
 
 	return rtnFlag;
 }
@@ -149,6 +158,18 @@ int NameScene(void)
 				nameFlag = true;
 			}	
 		}
+		else if (nameNum[0] != -1 && nameNum[1] != -1 && nameNum[2] != -1)
+		{
+			strcpy_s(name, 256, "");
+			for (int i = 0; i < 8; i++)
+			{
+				if (nameNum[i] != -1)
+				{
+					strcat_s(name, 256, letter[nameNum[i]]);
+				}
+			}
+			nameFlag = true;
+		}
 	}
 	
 
@@ -160,40 +181,62 @@ int NameScene(void)
 void NameDraw(void)
 {
 	ClsDrawScreen();
-	SetFontSize(50);
 
+
+	DrawGraph(0, 0, nameBackImage, true);
+
+
+
+	SetFontSize(50);
 
 	for (int i = 0; i < 8; i++)
 	{
 		if (nameNum[i] != -1)
 		{
 			SetFontSize(100);
-			DrawFormatString(400 + i * 100, 100, 0xFFFFFF, "%s", letter[nameNum[i]]);
+			DrawFormatString(425 + i * 100, 245, 0xFFFFFF, "%s", letter[nameNum[i]]);
 		}
 		if (i == nameCnt && !nameFlag)
 		{
 			SetFontSize(100);
 			if (nameNum[i] != -1)
 			{
-				DrawFormatString(400 + i * 100, 500, 0xFFFFFF, "%s", letter[nameNum[i]]);
+				DrawFormatString(425 + i * 100, 530, 0xFFFFFF, "%s", letter[nameNum[i]]);
 			}
 			SetFontSize(80);
 			if (nameNum[i] > -1)
 			{
-				DrawFormatString(405 + i * 100, 420, 0xFFFFFF, "%s", letter[nameNum[i] - 1]);
+				DrawFormatString(430 + i * 100, 450, 0xFFFFFF, "%s", letter[nameNum[i] - 1]);
 			}
 			if (nameNum[i] < 25)
 			{
-				DrawFormatString(405 + i * 100, 590, 0xFFFFFF, "%s", letter[nameNum[i] + 1]);
+				DrawFormatString(430 + i * 100, 620, 0xFFFFFF, "%s", letter[nameNum[i] + 1]);
 			}
 
-			DrawBox(370 + nameCnt * 100, 485, 485 + nameCnt * 100, 600, 0xFFFFFF, false);
+			DrawBox(395 + nameCnt * 100, 515, 510 + nameCnt * 100, 630, 0xFFFFFF, false);
 		}
-
-		SetFontSize(160);
-		DrawFormatString(385 + i * 100, 70, 0xFFFFFF, "_");
 		
 	}
+
+
+	if (!nameFlag)
+	{
+		DrawGraph(1300, 350, enterImage1, true);
+		if (nameCnt > 1)
+		{
+			if (nameNum[2] != -1 || nameNum[3] != -1)
+			{
+				DrawGraph(1300, 350, enterImage2, true);
+			}
+		}
+		else if (nameNum[0] != -1 && nameNum[1] != -1 && nameNum[2] != -1)
+		{
+			DrawGraph(1300, 350, enterImage2, true);
+		}
+	}
+	
+		
+	
 
 	SetFontSize(50);
 	ScreenFlip();
