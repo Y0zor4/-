@@ -145,6 +145,13 @@ int GetAttackLines(int floor)
 		if (enemy[floor - 1].Cnt <= 0)
 		{
 			enemy[floor - 1].Cnt = enemy[floor - 1].CntMax;
+			
+			if (floor - 1 > 10 && floor - 1 <= 20) enemy[floor - 1].Attack = 2;
+			else if (floor - 1 > 20 && floor - 1 <= 30) enemy[floor - 1].Attack = 3;
+			else if (floor - 1 > 30 && floor - 1 <= 40) enemy[floor - 1].Attack = 4;
+			else if (floor - 1 > 40 && floor - 1 <= 49) enemy[floor - 1].Attack = 5;
+			else if (floor - 1 == 50) enemy[floor - 1].Attack = 6;
+
 			return enemy[floor - 1].Attack;
 		}
 	}

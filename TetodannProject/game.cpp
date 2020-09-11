@@ -137,7 +137,7 @@ int GameScene(void)
 	GameDraw();
 
 	// ‰¹Ä¶
-	//PlaySoundMem(bgm, DX_PLAYTYPE_LOOP, false);
+	PlaySoundMem(bgm, DX_PLAYTYPE_LOOP, false);
 	
 	if (rtn != 0)
 	{
@@ -188,7 +188,7 @@ int DamageCalc(void)
 }
 
 // ŠK‘wˆÚ“®ˆ—
-void FloorMove(void)
+int FloorMove(void)
 {
 	if (fmFlag)
 	{
@@ -203,5 +203,5 @@ void FloorMove(void)
 			fmCnt = 0;
 		}
 	}
-
+	return floor;
 }

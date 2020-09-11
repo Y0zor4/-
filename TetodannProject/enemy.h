@@ -23,5 +23,5 @@ void EnemyDraw(int floor);
 int GetEnemyLife(void);
 int GetAttackLines(int floor);
 
-// 現在の敵の表示状態を返す(津田が勝手に作りました)。
+// 現在の敵の表示状態を返す
 bool GetEnemyBlend(int floor);

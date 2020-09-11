@@ -12,4 +12,4 @@ void GameDraw(void);
 
 
 int DamageCalc(void);		// ダメージ計算用関数
-void FloorMove(void);
+int FloorMove(void);
