@@ -38,7 +38,19 @@ void EnemyInit(void)
 		enemy[e].LifeMax = 100 * (e + 1);
 		enemy[e].Life = enemy[e].LifeMax;
 		enemy[e].Attack = 1;
-		enemy[e].CntMax = 500;
+		// ¶³İÄ’l‚Ìİ’è
+		if ((e + 1) % 10 < 6 && (e + 1) != 0)
+		{
+			enemy[e].CntMax = 600;
+		}
+		else if ((e + 1) % 10 > 5 || (e + 1) == 0)
+		{
+			enemy[e].CntMax = 400;
+		}
+		if ((e + 1) > 30)
+		{
+			enemy[e].CntMax = 300;
+		}
 		enemy[e].Cnt = enemy[e].CntMax;
 		enemy[e].Appear = 0;
 	}
@@ -146,11 +158,11 @@ int GetAttackLines(int floor)
 		{
 			enemy[floor - 1].Cnt = enemy[floor - 1].CntMax;
 			
-			if (floor - 1 > 10 && floor - 1 <= 20) enemy[floor - 1].Attack = 2;
-			else if (floor - 1 > 20 && floor - 1 <= 30) enemy[floor - 1].Attack = 3;
-			else if (floor - 1 > 30 && floor - 1 <= 40) enemy[floor - 1].Attack = 4;
-			else if (floor - 1 > 40 && floor - 1 <= 49) enemy[floor - 1].Attack = 5;
-			else if (floor - 1 == 50) enemy[floor - 1].Attack = 6;
+			if (floor > 10 && floor <= 20) enemy[floor - 1].Attack = 2;
+			else if (floor > 20 && floor <= 30) enemy[floor - 1].Attack = 3;
+			else if (floor > 30 && floor <= 40) enemy[floor - 1].Attack = 4;
+			else if (floor > 40 && floor <= 49) enemy[floor - 1].Attack = 5;
+			else if (floor == 50) enemy[floor - 1].Attack = 6;
 
 			return enemy[floor - 1].Attack;
 		}
